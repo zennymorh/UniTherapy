@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_therapist"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Therapist" />
+
+    <item
+        android:id="@+id/navigation_community"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Community" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="Chat" />
+
+</menu>
