@@ -1,12 +1,11 @@
 package com.zennymorh.unitherapy.splashscreen
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
-import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.auth.AuthActivity
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -14,7 +13,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val currentUser = Firebase.auth.currentUser
-        if(currentUser != null){
+        if (currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

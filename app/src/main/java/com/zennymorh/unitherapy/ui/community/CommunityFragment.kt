@@ -15,17 +15,20 @@ class CommunityFragment : Fragment() {
     private lateinit var communityViewModel: CommunityViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         communityViewModel =
-                ViewModelProviders.of(this).get(CommunityViewModel::class.java)
+            ViewModelProviders.of(this).get(CommunityViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_community, container, false)
         val textView: TextView = root.findViewById(R.id.text_dashboard)
-        communityViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        communityViewModel.text.observe(
+            viewLifecycleOwner,
+            Observer {
+                textView.text = it
+            }
+        )
         return root
     }
 }

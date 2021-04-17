@@ -1,7 +1,7 @@
 package com.zennymorh.unitherapy.auth
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.zennymorh.unitherapy.R
 
 class AuthActivity : AppCompatActivity() {

@@ -15,17 +15,20 @@ class TherapistFragment : Fragment() {
     private lateinit var therapyViewModel: TherapyViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         therapyViewModel =
-                ViewModelProviders.of(this).get(TherapyViewModel::class.java)
+            ViewModelProviders.of(this).get(TherapyViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_therapist, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        therapyViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        therapyViewModel.text.observe(
+            viewLifecycleOwner,
+            Observer {
+                textView.text = it
+            }
+        )
         return root
     }
 }

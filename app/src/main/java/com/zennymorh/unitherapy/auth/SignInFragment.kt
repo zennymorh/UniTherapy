@@ -4,11 +4,12 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -31,11 +32,18 @@ class SignInFragment : Fragment() {
     }
 
     private lateinit var auth: FirebaseAuth
-    private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(getString(R.string.default_web_client_id))
-        .requestEmail()
-        .build()
-    private val googleSignInClient = GoogleSignIn.getClient(this.requireActivity(), gso)
+    private val gso by lazy {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+    }
+    // Fun fact: Use lazy for things you don't want to run immediately. Also, this.requireActivity()
+    // will crash the app because you don't have access to the this yet.
+
+    private val googleSignInClient by lazy {
+        GoogleSignIn.getClient(this.requireActivity(), gso)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +52,8 @@ class SignInFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -57,19 +66,43 @@ class SignInFragment : Fragment() {
         signInBtn.setOnClickListener {
             val email = emailAddressET.text.toString()
             val password = passwordET.text.toString()
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(
+                    context,
+                    "Enter a valid email address",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    "Enter a valid password",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                     } else {
-                        Toast.makeText(context, "Authentication failed." + task.exception?.message,
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Authentication failed." + task.exception?.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         }
 
         signUpTxt.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+        }
+
+        signInGoogleBtn.setOnClickListener {
+            signIn()
         }
     }
 
@@ -112,6 +145,4 @@ class SignInFragment : Fragment() {
                 }
             }
     }
-
-
 }

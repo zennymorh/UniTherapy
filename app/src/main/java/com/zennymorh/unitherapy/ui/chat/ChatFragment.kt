@@ -15,17 +15,20 @@ class ChatFragment : Fragment() {
     private lateinit var chatViewModel: ChatViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         chatViewModel =
-                ViewModelProviders.of(this).get(ChatViewModel::class.java)
+            ViewModelProviders.of(this).get(ChatViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_chat, container, false)
         val textView: TextView = root.findViewById(R.id.text_notifications)
-        chatViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        chatViewModel.text.observe(
+            viewLifecycleOwner,
+            Observer {
+                textView.text = it
+            }
+        )
         return root
     }
 }

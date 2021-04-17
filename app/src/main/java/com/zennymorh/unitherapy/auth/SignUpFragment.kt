@@ -4,12 +4,15 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -18,7 +21,6 @@ import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-
 
 class SignUpFragment : Fragment() {
 
@@ -31,7 +33,8 @@ class SignUpFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -42,43 +45,20 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         signUpBtn.setOnClickListener {
+            val name = userNameET.text.toString()
             val email = emailAddressET.text.toString()
             val password = passwordET.text.toString()
-            val name = userNameET.text.toString()
+
+            if (!isValidEntry(name, email, password)) {
+                return@setOnClickListener
+            }
+
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
-//                        val user = auth.currentUser
-
-                        val db = Firebase.firestore
-                        val userId = auth.currentUser.uid
-                        val user = User(
-                            id = userId,
-                            name = name,
-                            email = email,
-                            isTherapist = false
-                        )
-                        db.collection("users")
-                            .document(userId)
-                            .set(user)
-                            .addOnSuccessListener {
-                                Log.d(TAG, "DocumentSnapshot successfully written!")
-                                val intent = Intent(this.activity, MainActivity::class.java)
-                                startActivity(intent)
-                            }
-                            .addOnFailureListener {
-                                    e -> Log.w(TAG, "Error writing document", e)
-                                Toast.makeText(context, "Adding to DB failed.",
-                                    Toast.LENGTH_SHORT).show()
-                            }
-
-
+                        handleSignUpSuccess(name, email)
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(context, "Authentication failed." + task.exception?.message,
-                            Toast.LENGTH_SHORT).show()
+                        handleSignUpFailure(task)
                     }
                 }
         }
@@ -86,5 +66,78 @@ class SignUpFragment : Fragment() {
         signInTV.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
         }
+    }
+
+    private fun handleSignUpFailure(task: Task<AuthResult>) {
+        // If sign in fails, display a message to the user.
+        Log.w(TAG, "createUserWithEmail:failure", task.exception)
+        Toast.makeText(
+            context,
+            "Authentication failed." + task.exception?.message,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun handleSignUpSuccess(name: String, email: String) {
+        Log.d(TAG, "createUserWithEmail:success")
+        // val user = auth.currentUser
+
+        val db = Firebase.firestore
+        val userId = auth.currentUser.uid
+        val user = User(
+            id = userId,
+            name = name,
+            email = email,
+            isTherapist = false
+        )
+        db.collection("users")
+            .document(userId)
+            .set(user)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+                val intent = Intent(this.activity, MainActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error writing document", e)
+                Toast.makeText(
+                    context,
+                    "Adding to DB failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+    private fun isValidEntry(
+        name: String,
+        email: String,
+        password: String
+    ): Boolean {
+        if (name.isEmpty()) {
+            Toast.makeText(
+                context,
+                "Enter a valid name",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(
+                context,
+                "Enter a valid email address",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+
+        if (password.isEmpty()) {
+            Toast.makeText(
+                context,
+                "Enter a valid password",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        return true
     }
 }
