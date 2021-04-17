@@ -1,10 +1,10 @@
-package com.zennymorh.unitherapy.ui.dashboard
+package com.zennymorh.unitherapy.ui.community
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class CommunityViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"

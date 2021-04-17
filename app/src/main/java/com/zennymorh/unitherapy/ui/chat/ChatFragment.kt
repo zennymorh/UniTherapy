@@ -1,4 +1,4 @@
-package com.zennymorh.unitherapy.ui.notifications
+package com.zennymorh.unitherapy.ui.chat
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.zennymorh.unitherapy.R
 
-class NotificationsFragment : Fragment() {
+class ChatFragment : Fragment() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private lateinit var chatViewModel: ChatViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_notifications, container, false)
+        chatViewModel =
+                ViewModelProviders.of(this).get(ChatViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_chat, container, false)
         val textView: TextView = root.findViewById(R.id.text_notifications)
-        notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
+        chatViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

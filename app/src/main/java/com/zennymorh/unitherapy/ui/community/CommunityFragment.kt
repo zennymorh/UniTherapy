@@ -1,4 +1,4 @@
-package com.zennymorh.unitherapy.ui.home
+package com.zennymorh.unitherapy.ui.community
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.zennymorh.unitherapy.R
 
-class HomeFragment : Fragment() {
+class CommunityFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var communityViewModel: CommunityViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        communityViewModel =
+                ViewModelProviders.of(this).get(CommunityViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_community, container, false)
+        val textView: TextView = root.findViewById(R.id.text_dashboard)
+        communityViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

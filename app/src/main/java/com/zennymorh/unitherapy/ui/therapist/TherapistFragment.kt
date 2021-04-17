@@ -1,4 +1,4 @@
-package com.zennymorh.unitherapy.ui.dashboard
+package com.zennymorh.unitherapy.ui.therapist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.zennymorh.unitherapy.R
 
-class DashboardFragment : Fragment() {
+class TherapistFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var therapyViewModel: TherapyViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        therapyViewModel =
+                ViewModelProviders.of(this).get(TherapyViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_therapist, container, false)
+        val textView: TextView = root.findViewById(R.id.text_home)
+        therapyViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
