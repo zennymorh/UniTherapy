@@ -1,5 +1,6 @@
 package com.zennymorh.unitherapy.auth
 
+import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +26,11 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(activity).apply {
+            setCancelable(false)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,12 +59,17 @@ class SignUpFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            progressDialog.setMessage("Creating user")
+            progressDialog.show()
+
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         handleSignUpSuccess(name, email)
+                        progressDialog.dismiss()
                     } else {
                         handleSignUpFailure(task)
+                        progressDialog.dismiss()
                     }
                 }
         }

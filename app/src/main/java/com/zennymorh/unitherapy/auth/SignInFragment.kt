@@ -1,5 +1,6 @@
 package com.zennymorh.unitherapy.auth
 
+import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -31,6 +32,11 @@ class SignInFragment : Fragment() {
     }
 
     private lateinit var auth: FirebaseAuth
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(activity).apply {
+            setCancelable(false)
+        }
+    }
     private val gso by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -43,6 +49,8 @@ class SignInFragment : Fragment() {
     private val googleSignInClient by lazy {
         GoogleSignIn.getClient(this.requireActivity(), gso)
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,18 +91,21 @@ class SignInFragment : Fragment() {
                 return@setOnClickListener
             }
 
-
+            progressDialog.setMessage("Signing In")
+            progressDialog.show()
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
+                        progressDialog.dismiss()
                     } else {
                         Toast.makeText(
                             context,
                             "Authentication failed." + task.exception?.message,
                             Toast.LENGTH_SHORT
                         ).show()
+                        progressDialog.dismiss()
                     }
                 }
         }

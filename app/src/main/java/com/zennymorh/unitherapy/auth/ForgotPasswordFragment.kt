@@ -1,5 +1,6 @@
 package com.zennymorh.unitherapy.auth
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -17,6 +18,12 @@ import kotlinx.android.synthetic.main.fragment_forgot_password.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class ForgotPasswordFragment : Fragment() {
+
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(activity).apply {
+            setCancelable(false)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +51,9 @@ class ForgotPasswordFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
+            progressDialog.setMessage("Loading")
+            progressDialog.show()
+
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -52,13 +62,17 @@ class ForgotPasswordFragment : Fragment() {
                             "Reset password email has been successfully sent to the email",
                             Toast.LENGTH_SHORT
                         ).show()
-                        findNavController().navigate(R.id.action_forgotPasswordFragment_to_signInFragment)
+                        findNavController().navigate(
+                            R.id.action_forgotPasswordFragment_to_signInFragment
+                        )
+                        progressDialog.dismiss()
                     } else {
                         Toast.makeText(
                             context,
                             "Something went wrong. ",
                             Toast.LENGTH_SHORT
                         ).show()
+                        progressDialog.dismiss()
                     }
                 }
                 .addOnFailureListener {
@@ -67,6 +81,7 @@ class ForgotPasswordFragment : Fragment() {
                         "I failed woefully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    progressDialog.dismiss()
                 }
                 .addOnSuccessListener {
                     Toast.makeText(
@@ -74,6 +89,7 @@ class ForgotPasswordFragment : Fragment() {
                         "I am successful in jesus' name",
                         Toast.LENGTH_SHORT
                     ).show()
+                    progressDialog.dismiss()
                 }
         }
     }
