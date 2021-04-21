@@ -23,7 +23,6 @@ import com.zennymorh.unitherapy.R
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlinx.android.synthetic.main.fragment_sign_in.emailAddressET
 import kotlinx.android.synthetic.main.fragment_sign_in.passwordET
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignInFragment : Fragment() {
 
@@ -83,6 +82,9 @@ class SignInFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
+
+
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -103,6 +105,10 @@ class SignInFragment : Fragment() {
 
         signInGoogleBtn.setOnClickListener {
             signIn()
+        }
+
+        forgotPasswordTV.setOnClickListener {
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
         }
     }
 
