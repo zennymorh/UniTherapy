@@ -95,11 +95,13 @@ class SignUpFragment : Fragment() {
 
         val db = Firebase.firestore
         val userId = auth.currentUser.uid
+        val isTherapistChecked = therapistCheckBox.isChecked
+
         val user = User(
             id = userId,
             name = name,
             email = email,
-            isTherapist = false
+            isTherapist = isTherapistChecked
         )
         db.collection("users")
             .document(userId)
