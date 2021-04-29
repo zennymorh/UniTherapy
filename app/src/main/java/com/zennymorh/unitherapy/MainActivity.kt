@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
@@ -18,7 +19,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var drawerLayout: DrawerLayout
@@ -41,10 +42,15 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         actionBarToggle.syncState()
-        navigationView = findViewById(R.id.navigationView)
         setSupportActionBar(mainActivityToolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment)
+//        navigationView.setNavigationItemSelectedListener(this)
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        findViewById<NavigationView>(R.id.navigationView)
+            .setupWithNavController(navController)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -57,29 +63,31 @@ class MainActivity : AppCompatActivity() {
         mainActivityToolbar.setupWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.profile -> {
-                    Toast.makeText(
-                        this,
-                        "Profile clicked",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    // Navigate to the profile screen
-                    true
-                }
-
-                R.id.signOut -> {
-                    Toast.makeText(this, "Signing out", Toast.LENGTH_SHORT).show()
-//                    auth.signOut()
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-        }
+//        navigationView.setNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.profile -> {
+//                    Toast.makeText(
+//                        this,
+//                        "Profile clicked",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    // Navigate to the profile screen
+//                    true
+//                }
+//
+//                R.id.signOut -> {
+//                    Toast.makeText(this, "Signing out", Toast.LENGTH_SHORT).show()
+////                    auth.signOut()
+//                    true
+//                }
+//                else -> {
+//                    false
+//                }
+//            }
+//        }
     }
+
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
@@ -93,5 +101,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.profile -> Toast.makeText(this, "Clicked item one", Toast.LENGTH_SHORT).show()
+            R.id.signOut -> Toast.makeText(this, "Clicked item two", Toast.LENGTH_SHORT).show()
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 }
