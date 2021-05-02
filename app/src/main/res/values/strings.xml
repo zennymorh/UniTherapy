@@ -13,4 +13,6 @@
     <string name="community">Community</string>
     <string name="therapist">Therapist</string>
     <string name="reset_password_text">You will receive a mail that will contain a link to reset your password</string>
+    <string name="contentDesc">A random Image</string>
+    <string name="testBio">I believe everyone should have a safe and healing place to work through life\'s difficulties. I try to help bring families and couples closer together through therapeutic work and help to have fulfilling relationships.</string>
 </resources>

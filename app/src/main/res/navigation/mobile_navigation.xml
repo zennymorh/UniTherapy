@@ -8,8 +8,12 @@
     <fragment
         android:id="@+id/navigation_therapist"
         android:name="com.zennymorh.unitherapy.ui.therapist.TherapistFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_therapist" />
+        android:label="@string/therapist"
+        tools:layout="@layout/fragment_therapist" >
+        <action
+            android:id="@+id/action_navigation_therapist_to_therapistDetailFragment"
+            app:destination="@id/therapistDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_community"
@@ -22,4 +26,14 @@
         android:name="com.zennymorh.unitherapy.ui.chat.ChatFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/therapistDetailFragment"
+        android:name="com.zennymorh.unitherapy.ui.therapist.TherapistDetailFragment"
+        android:label="fragment_therapist_detail"
+        tools:layout="@layout/fragment_therapist_detail">
+
+        <argument
+            android:name="selectedTherapist"
+            app:argType="com.zennymorh.unitherapy.model.User" />
+    </fragment>
 </navigation>
