@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/therapist"
+            android:icon="@drawable/sign_out"
+            android:title="Therapist" />
+
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/user"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/signOut"
+            android:icon="@drawable/sign_out"
+            android:title="Sign Out" />
+    </group>
+
+
+</menu>
