@@ -11,5 +11,8 @@ data class User(
     val email: String? = null,
     val isTherapist: Boolean = false,
     val backgroundImg: Int? = null,
-    val title: String? = null
+    val title: String? = null,
+    val fullDesc: String? = null,
+    val workExp: String? = null,
+    val hobbies: String? = null
 ) : Parcelable

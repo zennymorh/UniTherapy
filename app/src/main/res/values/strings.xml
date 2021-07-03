@@ -14,5 +14,14 @@
     <string name="therapist">Therapist</string>
     <string name="reset_password_text">You will receive a mail that will contain a link to reset your password</string>
     <string name="contentDesc">A random Image</string>
-    <string name="testBio">I believe everyone should have a safe and healing place to work through life\'s difficulties. I try to help bring families and couples closer together through therapeutic work and help to have fulfilling relationships.</string>
+    <string name="testBio">I believe everyone should have a safe and healing place to work through lif
+        e\'s difficulties. I try to help bring families and couples closer together through therapeutic
+        work and help to have fulfilling relationships.</string>
+    <string name="user_desc">Hi there! My name is Ezichi Ani and I am a trauma counselor. I am empathetic
+        towards anyone who is in a tough situation, I provide a safe space for healing and growing or
+        just if you need a listening ear. I am kind, I definitely do not judge, My pronouns are she/her.
+        I would like you to know that tough times never last, tough people do.
+        It\'s only a cliche cause it\'s true.</string>
+    <string name="work_experience">Work Experience</string>
+    <string name="hobbies">Hobbies</string>
 </resources>

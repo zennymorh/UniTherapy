@@ -22,18 +22,19 @@
         tools:layout="@layout/fragment_community" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_chat"
         android:name="com.zennymorh.unitherapy.ui.chat.ChatFragment"
-        android:label="@string/title_notifications"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/therapistDetailFragment"
         android:name="com.zennymorh.unitherapy.ui.therapist.TherapistDetailFragment"
-        android:label="fragment_therapist_detail"
         tools:layout="@layout/fragment_therapist_detail">
 
         <argument
             android:name="selectedTherapist"
             app:argType="com.zennymorh.unitherapy.model.User" />
+        <action
+            android:id="@+id/action_therapistDetailFragment_to_navigation_chat"
+            app:destination="@id/navigation_chat" />
     </fragment>
 </navigation>
