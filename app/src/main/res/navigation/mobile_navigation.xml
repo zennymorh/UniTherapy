@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_community"
-        android:name="com.zennymorh.unitherapy.ui.community.CommunityFragment"
+        android:name="com.zennymorh.unitherapy.ui.community.CommunitySectionsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_community" />
 
