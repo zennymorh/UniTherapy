@@ -1,11 +1,14 @@
 package com.zennymorh.unitherapy.ui.therapist
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 
@@ -51,6 +54,15 @@ class TherapistAdapter(private var therapistList:List<User>, var therapistItemCl
         bioText.text = therapist.bio
         val imgBg = holder.bgImg
         therapist.backgroundImg?.let { imgBg.setImageResource(it) }
+    }
+
+    fun fetchTherapists() {
+        val database = Firebase.firestore
+        var therapist = database.collection("users")
+            .whereEqualTo("isTherapist", true)
+            .get()
+
+        Log.d("WAHALAA", therapist.toString())
     }
 
     fun updateTherapistList(list: List<User>) {

@@ -18,13 +18,15 @@
     <fragment
         android:id="@+id/navigation_community"
         android:name="com.zennymorh.unitherapy.ui.community.CommunitySectionsFragment"
-        android:label="@string/title_dashboard"
+        android:label="Community"
         tools:layout="@layout/fragment_community" />
 
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.zennymorh.unitherapy.ui.chat.ChatFragment"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat" />
+
     <fragment
         android:id="@+id/therapistDetailFragment"
         android:name="com.zennymorh.unitherapy.ui.therapist.TherapistDetailFragment"
