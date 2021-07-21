@@ -33,7 +33,14 @@ class CommunitySectionsFragment : Fragment() {
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = "OBJECT ${(position + 1)}"
+            when (position) {
+                0 -> {
+                    tab.text = "All"
+                }
+                1 -> {
+                    tab.text = "Favourites"
+                }
+            }
         }.attach()
     }
 }
