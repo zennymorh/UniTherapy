@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.auth.AuthActivity
-import com.zennymorh.unitherapy.ui.profile.ProfileFragment
+import com.zennymorh.unitherapy.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     "Profile clicked",
                     Toast.LENGTH_SHORT
                 ).show()
-                val intent = Intent(this, ProfileFragment::class.java)
+                val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
                 true
             }

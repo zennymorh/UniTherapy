@@ -94,7 +94,7 @@ class SignUpFragment : Fragment() {
         // val user = auth.currentUser
 
         val db = Firebase.firestore
-        val userId = auth.currentUser.uid
+        val userId = auth.currentUser?.uid
         val isTherapistChecked = therapistCheckBox.isChecked
 
         val user = User(
@@ -104,7 +104,7 @@ class SignUpFragment : Fragment() {
             isTherapist = isTherapistChecked
         )
         db.collection("users")
-            .document(userId)
+            .document(userId!!)
             .set(user)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
