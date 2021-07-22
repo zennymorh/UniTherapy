@@ -3,11 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/therapist"
-            android:icon="@drawable/sign_out"
-            android:title="Therapist" />
+    <group android:checkableBehavior="all">
 
         <item
             android:id="@+id/profile"
