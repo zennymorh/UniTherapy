@@ -1,5 +1,7 @@
 package com.zennymorh.unitherapy.ui.community.list
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import com.zennymorh.unitherapy.ui.community.CommunityAdapter
+import kotlinx.android.synthetic.main.community_item.*
 
 class CommunitiesFragment : Fragment() {
     private var communityArray = arrayListOf(
@@ -59,5 +62,9 @@ class CommunitiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (view as RecyclerView).adapter = communityAdapter
+
+        val prefs: SharedPreferences = requireContext().getSharedPreferences(requireContext().getString(R.string.app_name), Context.MODE_PRIVATE)
+
+//        fav_button.isChecked = prefs.getBoolean("favButtonChecked", false)
     }
 }

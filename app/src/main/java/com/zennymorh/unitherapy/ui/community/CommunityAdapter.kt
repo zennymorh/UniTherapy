@@ -1,25 +1,85 @@
 package com.zennymorh.unitherapy.ui.community
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.zennymorh.unitherapy.DATABASE_REFS
 import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.model.Favorite
 import com.zennymorh.unitherapy.model.User
+import kotlinx.android.synthetic.main.community_item.view.*
 
 typealias CommunityItemClickListener = (User) -> Unit
 
-class CommunityAdapter (private var communityList:List<User>, var communityItemClickListener: CommunityItemClickListener):
+private lateinit var database: DatabaseReference
+private lateinit var editor: SharedPreferences
+
+class CommunityAdapter (private var communityList: List<User>, var communityItemClickListener: CommunityItemClickListener):
     RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder>() {
 
     inner class CommunityViewHolder(inflater: LayoutInflater, parent: ViewGroup):
         RecyclerView.ViewHolder(inflater.inflate(
             R.layout.community_item, parent,
             false)), View.OnClickListener {
-        val userNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
-        val userPostTV: TextView = itemView.findViewById(R.id.user_post_tv)
+        private val userNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
+        private val userPostTV: TextView = itemView.findViewById(R.id.user_post_tv)
+        private val favButton: ToggleButton = itemView.fav_button
+
+        fun bind(user: User) {
+
+            val context = itemView.context
+
+            val prefs: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
+            val editor = prefs.edit()
+
+            favButton.isChecked = prefs.getBoolean("favButtonChecked", false)
+
+            userNameTV.text = user.name
+            userPostTV.text = user.post
+
+            favButton.setOnClickListener {
+
+                database = FirebaseDatabase.getInstance().getReference(DATABASE_REFS)
+                val id = database.push().key ?: ""
+
+                val fav = Favorite(
+                    id = id,
+                    name = user.name!!,
+                    post = user.post!!
+                )
+
+                if (favButton.isChecked) {
+                    editor.putBoolean("favButtonChecked", true)
+                    editor.apply()
+
+                    database.child(id).setValue(fav)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Added to favorite: $id", Toast.LENGTH_LONG).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Error adding to favorite: $it. Please try again", Toast.LENGTH_LONG).show()
+                        }
+                } else {
+                    editor.putBoolean("favButtonChecked", false)
+                    editor.apply()
+
+                    database.child(id).removeValue()
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Deleted favorite: $id", Toast.LENGTH_LONG).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Error deleting favorite: $id", Toast.LENGTH_LONG).show()
+                        }
+                }
+            }
+        }
 
 
         init {
@@ -41,10 +101,8 @@ class CommunityAdapter (private var communityList:List<User>, var communityItemC
 
     override fun onBindViewHolder(holder: CommunityViewHolder, position: Int) {
         val community: User = communityList[position]
-        val nameText = holder.userNameTV
-        nameText.text = community.name
-        val postText = holder.userPostTV
-        postText.text = community.post
+
+        holder.bind(community)
     }
 
     fun updateCommunityList(list: List<User>) {
