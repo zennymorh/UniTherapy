@@ -1,5 +1,7 @@
 package com.zennymorh.unitherapy.ui.community.list
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,36 +11,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import com.zennymorh.unitherapy.ui.community.CommunityAdapter
+import kotlinx.android.synthetic.main.community_item.*
 
 class CommunitiesFragment : Fragment() {
     private var communityArray = arrayListOf(
         User(
             id = "randomId",
             name = "Zainab Jimoh",
-            post = "I believe everyone should have a safe and healing place to work through life's " +
-                    "difficulties. I try to help bring families and couples closer together through " +
-                    "therapeutic work and help to have fulfilling relationships."
+            post = "Feeling overwhelmed today,Send help"
         ),
         User(
             id = "randomId",
             name = "Ezichi Amarachi",
-            post = "I believe everyone should have a safe and healing place to work through life's " +
-                    "difficulties. I try to help bring families and couples closer together through " +
-                    "therapeutic work and help to have fulfilling relationships."
+            post = "I heard something interesting today that we treat others unconsciously how we wanna " +
+                    "be treated."
         ),
         User(
             id = "randomId",
             name = "Vivian Fatima",
-            post = "I believe everyone should have a safe and healing place to work through life's " +
-                    "difficulties. I try to help bring families and couples closer together through " +
-                    "therapeutic work and help to have fulfilling relationships."
+            post = "I'm doing better today, and I am so proud of myself"
         ),
         User(
             id = "randomId",
             name = "Segun Famisa",
-            post = "I believe everyone should have a safe and healing place to work through life's " +
-                    "difficulties. I try to help bring families and couples closer together through " +
-                    "therapeutic work and help to have fulfilling relationships."
+            post = "Have a good one guys!"
         )
     )
 
@@ -59,5 +55,9 @@ class CommunitiesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (view as RecyclerView).adapter = communityAdapter
+
+        val prefs: SharedPreferences = requireContext().getSharedPreferences(requireContext().getString(R.string.app_name), Context.MODE_PRIVATE)
+
+//        fav_button.isChecked = prefs.getBoolean("favButtonChecked", false)
     }
 }
