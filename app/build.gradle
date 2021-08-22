@@ -80,7 +80,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.2.1')
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.firebase:firebase-database:20.0.0'
-    implementation 'com.firebaseui:firebase-ui-database:6.2.1'gi
+    implementation 'com.firebaseui:firebase-ui-database:6.2.1'
+    implementation "com.firebaseui:firebase-ui-firestore:6.2.1"
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     //Circle ImageView

@@ -2,7 +2,6 @@ package com.zennymorh.unitherapy.ui.community
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -46,7 +43,7 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
             favButton.isChecked = prefs.getBoolean("favButtonChecked", false)
 
             userNameTV.text = user.name
-            userPostTV.text = user.post
+//            userPostTV.text = user.posts.toString()
 
             favButton.setOnClickListener {
 
@@ -56,15 +53,15 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
 
                 val database = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
 
-                val fav = User(
-                    id = userId,
-                    name = user.name!!,
-                    post = user.post!!)
+//                val fav = User(
+//                    id = userId,
+//                    name = user.name!!,
+//                    posts = user.posts)
 
                 if (favButton.isChecked) {
 
                     database.update(mapOf(
-                        "post" to user.post,
+//                        "post" to user.posts,
                         "isFavorite" to true
                     ))
                         .addOnSuccessListener {

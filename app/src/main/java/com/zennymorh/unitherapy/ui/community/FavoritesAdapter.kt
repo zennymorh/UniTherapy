@@ -6,18 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.zennymorh.unitherapy.DATABASE_REFS
-import com.zennymorh.unitherapy.model.Favorite
 import kotlinx.android.synthetic.main.favorite_item.view.*
 
-import com.firebase.ui.database.FirebaseRecyclerOptions
-
-import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.FirebaseFirestore
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 
@@ -42,7 +34,7 @@ class FavoritesViewHolder(private val view: View): RecyclerView.ViewHolder(view)
         val delButton: ImageButton = view.delete_button
 
         name.text = fav.name
-        post.text = fav.post
+//        post.text = fav.posts.toString()
     }
 }
 //class FavoriteAdapter (private var favList: ArrayList<User>):

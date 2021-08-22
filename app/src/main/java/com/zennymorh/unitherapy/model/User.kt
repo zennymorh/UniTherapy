@@ -16,6 +16,11 @@ data class User(
     val title: String? = null,
     val fullDesc: String? = null,
     val workExp: String? = null,
-    val hobbies: String? = null,
-    val post: String? = null
+    val hobbies: String? = null
 ) : Parcelable
+
+@Parcelize
+data class Posts(
+    val name: String? = null,
+    val post: String? = null
+): Parcelable
