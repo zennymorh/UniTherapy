@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.fragment_therapist_detail.*
@@ -14,6 +17,8 @@ import kotlinx.android.synthetic.main.fragment_therapist_detail.*
 class TherapistDetailFragment : Fragment() {
 
     private val args: TherapistDetailFragmentArgs by navArgs()
+    private var storageRef = FirebaseStorage.getInstance().reference
+    private val imagesRef = storageRef.child("images")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +44,12 @@ class TherapistDetailFragment : Fragment() {
         user_desc_TV.text = therapist.fullDesc
         work_exp.text = therapist.workExp
         hobbies.text = therapist.hobbies
+        therapist.backgroundImg?.let { profileImage.setImageResource(it) }
+
+        imagesRef.child(therapist.id.toString()).downloadUrl.addOnSuccessListener {
+            Glide.with(this).load(it).into(profileImage)
+        }
+
     }
 
 }

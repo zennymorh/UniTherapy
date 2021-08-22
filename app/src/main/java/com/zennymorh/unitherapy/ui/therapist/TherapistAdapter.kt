@@ -7,13 +7,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 
 class TherapistAdapter(options: FirestoreRecyclerOptions<User>):
     FirestoreRecyclerAdapter<User, TherapistAdapter.TherapistViewHolder>(options) {
+
+    private var storageRef = FirebaseStorage.getInstance().reference
+    private val imagesRef = storageRef.child("images")
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TherapistViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.therapist_item, parent, false)
 
@@ -29,7 +35,7 @@ class TherapistAdapter(options: FirestoreRecyclerOptions<User>):
         }
     }
 
-    inner class TherapistViewHolder(private val view:View): RecyclerView.ViewHolder(view){
+    inner class TherapistViewHolder(view:View): RecyclerView.ViewHolder(view){
         fun bind(user: User) {
 
             val nameTV: TextView = itemView.findViewById(R.id.therapistName)
@@ -40,6 +46,10 @@ class TherapistAdapter(options: FirestoreRecyclerOptions<User>):
             nameTV.text = user.name
             titleTV.text = user.title
             bioTV.text = user.bio
+
+            imagesRef.child(user.id.toString()).downloadUrl.addOnSuccessListener {
+                Glide.with(itemView).load(it).into(bgImg)
+            }
 
         }
     }
