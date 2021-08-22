@@ -57,10 +57,9 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
                 val database = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
 
                 val fav = User(
-                    id = user.id,
-                    name = user.name,
-                    post = user.post
-                )
+                    id = userId,
+                    name = user.name!!,
+                    post = user.post!!)
 
                 if (favButton.isChecked) {
 
