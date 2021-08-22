@@ -5,31 +5,33 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.activity_profile.*
-import java.io.File
 
 class ProfileActivity : AppCompatActivity() {
 
     private val pickImage = 100
     private var imageUri: Uri? = null
     private val storage = Firebase.storage
-    var storageRef = storage.reference
+    private var storageRef = storage.reference
+    val userId = Firebase.auth.currentUser?.uid
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        var isEditing: Boolean = true
+
+        getProfile()
 
         saveBtn.setOnClickListener {
-            isEditing = false
             editProfile()
         }
         uploadImgTV.setOnClickListener {
@@ -48,11 +50,50 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
+    private fun getProfile() {
+
+            val database = FirebaseFirestore.getInstance()
+            val userId = Firebase.auth.currentUser?.uid
+
+            database.collection("users").document(userId!!).get()
+                .addOnCompleteListener {task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+
+                        if (document?.getString("name") != null) {
+                            fullNameET.hint = ""
+                            fullNameET.text = document.getString("name")?.toEditable()
+                        }
+
+                        if (document?.getString("title") != null) {
+                            therapistTypeET.hint = ""
+                            therapistTypeET.text = document.getString("title")?.toEditable()
+                        }
+
+                        if (document?.getString("bio") != null) {
+                            fullBioET.hint = ""
+                            fullBioET.text = document.getString("bio")?.toEditable()
+                        }
+
+                        if (document?.getString("hobbies") != null) {
+                            hobbiesET.hint = ""
+                            hobbiesET.text = document.getString("hobbies")?.toEditable()
+                        }
+
+                        if (document?.getString("workExp") != null) {
+                            workExpET.hint = ""
+                            workExpET.text = document.getString("workExp")?.toEditable()
+                        }
+                    }
+                }
+    }
+
     private fun editProfile() {
         performValidations()
 
-        val database = Firebase.firestore
-        val userId = Firebase.auth.currentUser?.uid
+        val database = FirebaseFirestore.getInstance()
         val email = Firebase.auth.currentUser?.email
         val name = fullNameET.text.toString()
         val title = therapistTypeET.text.toString()
@@ -79,9 +120,10 @@ class ProfileActivity : AppCompatActivity() {
     private fun saveImage() {
         val imgStream = imageUri?.let { contentResolver.openInputStream(it) }
 
-        val file = Uri.fromFile(File(imageUri.toString()))
-        val imagesRef = storageRef.child("images/${file.lastPathSegment}")
-        val uploadTask = imgStream?.let { imagesRef.putStream(it) }
+        val imagesRef = storageRef.child("images/${userId}")
+        val uploadTask = imgStream?.let {
+            imagesRef.putStream(it)
+        }
         uploadTask?.addOnProgressListener {
 
         }
@@ -90,7 +132,7 @@ class ProfileActivity : AppCompatActivity() {
             }
             uploadTask?.addOnFailureListener {
                 it.printStackTrace()
-                Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Image upload unsuccessful", Toast.LENGTH_SHORT).show()
 
             }
     }
