@@ -2,24 +2,28 @@ package com.zennymorh.unitherapy.ui.community
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.zennymorh.unitherapy.DATABASE_REFS
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
-import com.zennymorh.unitherapy.model.Favorite
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.community_item.view.*
 
+
 typealias CommunityItemClickListener = (User) -> Unit
 
-private lateinit var database: DatabaseReference
 private lateinit var editor: SharedPreferences
+private lateinit var auth: FirebaseAuth
 
 class CommunityAdapter (private var communityList: List<User>, var communityItemClickListener: CommunityItemClickListener):
     RecyclerView.Adapter<CommunityAdapter.CommunityViewHolder>() {
@@ -46,38 +50,82 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
 
             favButton.setOnClickListener {
 
-                database = FirebaseDatabase.getInstance().getReference(DATABASE_REFS)
-                val id = database.push().key ?: ""
+                auth = Firebase.auth
 
-                val fav = Favorite(
-                    id = id,
-                    name = user.name!!,
-                    post = user.post!!
+                val userId = auth.currentUser?.uid
+
+                val database = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
+
+                val fav = User(
+                    id = user.id,
+                    name = user.name,
+                    post = user.post
                 )
 
                 if (favButton.isChecked) {
-                    editor.putBoolean("favButtonChecked", true)
-                    editor.apply()
 
-                    database.child(id).setValue(fav)
+                    database.update(mapOf(
+                        "post" to user.post,
+                        "isFavorite" to true
+                    ))
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Added to favorite: $id", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Added to favorite: $userId", Toast.LENGTH_LONG).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(context, "Error adding to favorite: $it. Please try again", Toast.LENGTH_LONG).show()
                         }
+
+                    editor.putBoolean("favButtonChecked", true)
+                    editor.apply()
+
                 } else {
                     editor.putBoolean("favButtonChecked", false)
                     editor.apply()
 
-                    database.child(id).removeValue()
+                    database.update(mapOf(
+                        "isFavorite" to false,
+                        "post" to FieldValue.delete()
+                    ))
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Deleted favorite: $id", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Deleted favorite: $userId", Toast.LENGTH_LONG).show()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, "Error deleting favorite: $id", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Error deleting favorite: $userId", Toast.LENGTH_LONG).show()
                         }
                 }
+
+//                database = FirebaseDatabase.getInstance().getReference(DATABASE_REFS)
+//                val id = database.push().key ?: ""
+//
+//                val fav = Favorite(
+//                    id = id,
+//                    name = user.name!!,
+//                    post = user.post!!
+//                )
+//
+//                if (favButton.isChecked) {
+//                    editor.putBoolean("favButtonChecked", true)
+//                    editor.apply()
+//
+//                    database.child(id).setValue(fav)
+//                        .addOnSuccessListener {
+//                            Toast.makeText(context, "Added to favorite: $id", Toast.LENGTH_LONG).show()
+//                        }
+//                        .addOnFailureListener {
+//                            Toast.makeText(context, "Error adding to favorite: $it. Please try again", Toast.LENGTH_LONG).show()
+//                        }
+//                } else {
+//                    editor.putBoolean("favButtonChecked", false)
+//                    editor.apply()
+//
+//                    database.child(id).removeValue()
+//                        .addOnSuccessListener {
+//                            Toast.makeText(context, "Deleted favorite: $id", Toast.LENGTH_LONG).show()
+//                        }
+//                        .addOnFailureListener {
+//                            Toast.makeText(context, "Error deleting favorite: $id", Toast.LENGTH_LONG).show()
+//                        }
+//                }
             }
         }
 

@@ -11,6 +11,7 @@ data class User(
     val email: String? = null,
     @field:JvmField
     val isTherapist: Boolean = false,
+    val isFavorite: Boolean = false,
     val backgroundImg: Int? = null,
     val title: String? = null,
     val fullDesc: String? = null,
