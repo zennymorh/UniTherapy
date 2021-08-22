@@ -35,7 +35,7 @@ class TherapistAdapter(options: FirestoreRecyclerOptions<User>):
         }
     }
 
-    inner class TherapistViewHolder(private val view:View): RecyclerView.ViewHolder(view){
+    inner class TherapistViewHolder(view:View): RecyclerView.ViewHolder(view){
         fun bind(user: User) {
 
             val nameTV: TextView = itemView.findViewById(R.id.therapistName)
