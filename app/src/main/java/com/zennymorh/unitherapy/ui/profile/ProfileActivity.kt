@@ -26,7 +26,7 @@ class ProfileActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var storageRef = FirebaseStorage.getInstance().reference
     private val userId = Firebase.auth.currentUser?.uid
-    private val imagesRef = storageRef.child("images/${userId}")
+    private val imagesRef = storageRef.child("images").child(userId!!)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

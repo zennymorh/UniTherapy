@@ -46,13 +46,11 @@ class TherapistFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         therapistAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-
         therapistAdapter.stopListening()
     }
 }
