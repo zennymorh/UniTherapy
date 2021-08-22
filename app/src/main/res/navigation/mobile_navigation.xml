@@ -19,7 +19,11 @@
         android:id="@+id/navigation_community"
         android:name="com.zennymorh.unitherapy.ui.community.CommunitySectionsFragment"
         android:label="Community"
-        tools:layout="@layout/fragment_community" />
+        tools:layout="@layout/fragment_community" >
+        <action
+            android:id="@+id/action_navigation_community_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_chat"
@@ -39,4 +43,9 @@
             android:id="@+id/action_therapistDetailFragment_to_navigation_chat"
             app:destination="@id/navigation_chat" />
     </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.zennymorh.unitherapy.ui.community.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
 </navigation>
