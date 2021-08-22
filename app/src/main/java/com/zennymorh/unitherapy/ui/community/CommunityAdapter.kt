@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.zennymorh.unitherapy.DATABASE_REFS
 import com.zennymorh.unitherapy.R
-import com.zennymorh.unitherapy.model.Favorite
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.community_item.view.*
 
@@ -49,7 +47,7 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
                 database = FirebaseDatabase.getInstance().getReference(DATABASE_REFS)
                 val id = database.push().key ?: ""
 
-                val fav = Favorite(
+                val fav = User(
                     id = id,
                     name = user.name!!,
                     post = user.post!!
