@@ -2,28 +2,31 @@ package com.zennymorh.unitherapy.ui.profile
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.activity_profile.*
 
+
 class ProfileActivity : AppCompatActivity() {
 
     private val pickImage = 100
     private var imageUri: Uri? = null
-    private val storage = Firebase.storage
-    private var storageRef = storage.reference
-    val userId = Firebase.auth.currentUser?.uid
+    private var storageRef = FirebaseStorage.getInstance().reference
+    private val userId = Firebase.auth.currentUser?.uid
+    private val imagesRef = storageRef.child("images").child(userId!!)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,40 +57,49 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun getProfile() {
 
-            val database = FirebaseFirestore.getInstance()
-            val userId = Firebase.auth.currentUser?.uid
+        val database = FirebaseFirestore.getInstance()
+        val userId = Firebase.auth.currentUser?.uid
 
-            database.collection("users").document(userId!!).get()
-                .addOnCompleteListener {task ->
-                    if (task.isSuccessful) {
-                        val document = task.result
+        imagesRef.downloadUrl.addOnSuccessListener {
+            Glide.with(this).load(it).into(profileImage)
+            Log.d("TAG", "I got here")
+        }
 
-                        if (document?.getString("name") != null) {
-                            fullNameET.hint = ""
-                            fullNameET.text = document.getString("name")?.toEditable()
-                        }
+        database.collection("users").document(userId!!).get()
+            .addOnCompleteListener {task ->
+                if (task.isSuccessful) {
+                    val document = task.result
 
-                        if (document?.getString("title") != null) {
-                            therapistTypeET.hint = ""
-                            therapistTypeET.text = document.getString("title")?.toEditable()
-                        }
+                    if (document?.getString("name") != null) {
+                        fullNameET.hint = ""
+                        fullNameET.text = document.getString("name")?.toEditable()
+                    }
 
-                        if (document?.getString("bio") != null) {
-                            fullBioET.hint = ""
-                            fullBioET.text = document.getString("bio")?.toEditable()
-                        }
+                    if (document?.getString("title") != null) {
+                        therapistTypeET.hint = ""
+                        therapistTypeET.text = document.getString("title")?.toEditable()
+                    }
 
-                        if (document?.getString("hobbies") != null) {
-                            hobbiesET.hint = ""
-                            hobbiesET.text = document.getString("hobbies")?.toEditable()
-                        }
+                    if (document?.getString("bio") != null) {
+                        fullBioET.hint = ""
+                        fullBioET.text = document.getString("bio")?.toEditable()
+                    }
 
-                        if (document?.getString("workExp") != null) {
-                            workExpET.hint = ""
-                            workExpET.text = document.getString("workExp")?.toEditable()
-                        }
+                    if (document?.getString("hobbies") != null) {
+                        hobbiesET.hint = ""
+                        hobbiesET.text = document.getString("hobbies")?.toEditable()
+                    }
+
+                    if (document?.getString("workExp") != null) {
+                        workExpET.hint = ""
+                        workExpET.text = document.getString("workExp")?.toEditable()
+                    }
+
+                    if (document?.getBoolean("isTherapist") == true) {
+                        therapistCheckBox.isChecked = true
                     }
                 }
+            }
     }
 
     private fun editProfile() {
@@ -100,6 +112,7 @@ class ProfileActivity : AppCompatActivity() {
         val bio = fullBioET.text.toString()
         val hobbies = hobbiesET.text.toString()
         val workExp = workExpET.text.toString()
+        val isTherapistChecked = therapistCheckBox.isChecked
 
         saveImage()
 
@@ -110,7 +123,8 @@ class ProfileActivity : AppCompatActivity() {
             email = email,
             bio = bio,
             hobbies = hobbies,
-            workExp = workExp
+            workExp = workExp,
+            isTherapist = isTherapistChecked
         )
         database.collection("users")
             .document(userId!!)
@@ -120,7 +134,6 @@ class ProfileActivity : AppCompatActivity() {
     private fun saveImage() {
         val imgStream = imageUri?.let { contentResolver.openInputStream(it) }
 
-        val imagesRef = storageRef.child("images/${userId}")
         val uploadTask = imgStream?.let {
             imagesRef.putStream(it)
         }
