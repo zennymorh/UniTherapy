@@ -1,17 +1,26 @@
 package com.zennymorh.unitherapy.ui.therapist
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
+import com.zennymorh.unitherapy.ui.chat.ChatFragment
 import kotlinx.android.synthetic.main.fragment_therapist_detail.*
 
 class TherapistDetailFragment : Fragment() {
@@ -19,6 +28,8 @@ class TherapistDetailFragment : Fragment() {
     private val args: TherapistDetailFragmentArgs by navArgs()
     private var storageRef = FirebaseStorage.getInstance().reference
     private val imagesRef = storageRef.child("images")
+    private val auth = Firebase.auth.currentUser?.uid
+    val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +44,30 @@ class TherapistDetailFragment : Fragment() {
         val therapist = args.selectedTherapist
         bind(therapist)
 
+        val roomId: String = therapist.id.toString() + auth
+
         chatFAB.setOnClickListener {
-            findNavController().navigate(R.id.action_therapistDetailFragment_to_navigation_chat)
+            Log.d("FUCKKKK", roomId)
+            if (roomId.isEmpty()) {
+                return@setOnClickListener
+            } else {
+                firestore.collection("users").document(auth.toString())
+                    .collection("rooms").document(roomId)
+                    .set(mapOf(
+                        Pair("roomId", roomId)
+                    ))
+
+                firestore.collection("users").document(therapist.id.toString())
+                    .collection("rooms").document(roomId)
+                    .set(mapOf(
+                        Pair("roomId", roomId)
+                    ))
+            }
+
+            val bundle = bundleOf(
+                "roomId" to roomId,
+            "receiverId" to therapist.id.toString())
+            findNavController().navigate(R.id.action_therapistDetailFragment_to_navigation_chat, bundle)
         }
     }
 
