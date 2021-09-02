@@ -39,8 +39,8 @@ class PostAdapter(options: FirestoreRecyclerOptions<Posts>):
     inner class PostViewHolder(view:View): RecyclerView.ViewHolder(view){
         fun bind(post: Posts) {
 
-            val nameTV: TextView = itemView.findViewById(R.id.user_name_tv)
-            val postTV: TextView = itemView.findViewById(R.id.user_post_tv)
+            val nameTV: TextView = itemView.findViewById(R.id.name)
+            val postTV: TextView = itemView.findViewById(R.id.message)
             val favBtn: ToggleButton = itemView.findViewById(R.id.fav_button)
 
             nameTV.text = post.name
