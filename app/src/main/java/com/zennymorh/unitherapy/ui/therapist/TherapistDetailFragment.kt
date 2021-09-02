@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -43,23 +44,29 @@ class TherapistDetailFragment : Fragment() {
         val therapist = args.selectedTherapist
         bind(therapist)
 
+        val roomId: String = therapist.id.toString() + auth
+
         chatFAB.setOnClickListener {
-            val roomId: String = therapist.id.toString() + auth
             Log.d("FUCKKKK", roomId)
             if (roomId.isEmpty()) {
                 return@setOnClickListener
+            } else {
+                firestore.collection("users").document(auth.toString())
+                    .collection("rooms").document(roomId)
+                    .set(mapOf(
+                        Pair("roomId", roomId)
+                    ))
+
+                firestore.collection("users").document(therapist.id.toString())
+                    .collection("rooms").document(roomId)
+                    .set(mapOf(
+                        Pair("roomId", roomId)
+                    ))
             }
 
-            auth.let {
-                if (it != null) {
-                    firestore.collection("users").document(it).collection("rooms")
-                        .document(roomId).set(mapOf(
-                            Pair("id", roomId)
-                        ))
-                }
-            }
-
-            val bundle = bundleOf("roomId" to roomId)
+            val bundle = bundleOf(
+                "roomId" to roomId,
+            "receiverId" to therapist.id.toString())
             findNavController().navigate(R.id.action_therapistDetailFragment_to_navigation_chat, bundle)
         }
     }

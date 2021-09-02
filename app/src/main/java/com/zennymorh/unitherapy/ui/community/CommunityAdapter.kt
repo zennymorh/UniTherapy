@@ -29,8 +29,8 @@ class CommunityAdapter (private var communityList: List<User>, var communityItem
         RecyclerView.ViewHolder(inflater.inflate(
             R.layout.community_item, parent,
             false)), View.OnClickListener {
-        private val userNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
-        private val userPostTV: TextView = itemView.findViewById(R.id.user_post_tv)
+        private val userNameTV: TextView = itemView.findViewById(R.id.name)
+        private val userPostTV: TextView = itemView.findViewById(R.id.message)
         private val favButton: ToggleButton = itemView.fav_button
 
         fun bind(user: User) {
