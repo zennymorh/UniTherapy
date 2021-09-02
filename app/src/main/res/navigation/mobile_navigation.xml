@@ -29,7 +29,12 @@
         android:id="@+id/navigation_chat"
         android:name="com.zennymorh.unitherapy.ui.chat.ChatFragment"
         android:label="Chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="roomId"
+            app:argType="string" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/therapistDetailFragment"
