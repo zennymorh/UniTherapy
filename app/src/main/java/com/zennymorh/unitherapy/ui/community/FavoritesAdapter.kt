@@ -5,68 +5,53 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.favorite_item.view.*
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.model.Posts
 import com.zennymorh.unitherapy.model.User
+import com.zennymorh.unitherapy.ui.community.list.PostAdapter
 
-class FavoritesAdapter(options: FirestoreRecyclerOptions<User>): FirestoreRecyclerAdapter<User, FavoritesViewHolder>(options) {
+class FavoritesAdapter(options: FirestoreRecyclerOptions<Posts>):
+    FirestoreRecyclerAdapter<Posts, FavoritesAdapter.FavoritesViewHolder>(options) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesAdapter.FavoritesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.favorite_item, parent, false)
 
         return FavoritesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int, model: User) {
+    override fun onBindViewHolder(holder: FavoritesAdapter.FavoritesViewHolder, position: Int, model: Posts) {
         holder.bind(model)
     }
 
-}
+    inner class FavoritesViewHolder(view:View): RecyclerView.ViewHolder(view){
+        fun bind(post: Posts) {
 
-class FavoritesViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
-    fun bind(fav: User) {
-        val name: TextView = view.fav_name
-        val post: TextView = view.fav_post
-        val delButton: ImageButton = view.delete_button
+            val nameTV: TextView = itemView.findViewById(R.id.fav_name)
+            val postTV: TextView = itemView.findViewById(R.id.fav_post)
+            val delBtn: ImageButton = itemView.findViewById(R.id.delete_button)
 
-        name.text = fav.name
-//        post.text = fav.posts.toString()
+            nameTV.text = post.name
+            postTV.text = post.post
+
+            val db = FirebaseFirestore.getInstance()
+            val userId = Firebase.auth.currentUser?.uid.toString()
+
+            val postId = post.postId
+
+            delBtn.setOnClickListener {
+                db.collection("users").document(userId)
+                    .collection("favorites").document(postId.toString()).delete()
+            }
+        }
     }
+
 }
-//class FavoriteAdapter (private var favList: ArrayList<User>):
-//    RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
-//
-//    inner class FavoriteViewHolder(inflater: LayoutInflater, parent: ViewGroup):
-//        RecyclerView.ViewHolder(inflater.inflate(
-//            R.layout.favorite_item, parent,
-//            false)) {
-//        val name: TextView = itemView.fav_name
-//        val post: TextView = itemView.fav_post
-//        val delButton: ImageButton = itemView.delete_button
-//
-//    }
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
-//        val inflater = LayoutInflater.from(parent.context)
-//        return FavoriteViewHolder(inflater, parent)
-//    }
-//
-//    override fun getItemCount(): Int = favList.size
-//
-//    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-//        val favorite = favList[position]
-//
-//        holder.name.text = favorite.name
-//        holder.post.text = favorite.post
-//
-//    }
-//
-//    fun updateCommunityList(list: ArrayList<User>) {
-//        favList = list
-//        notifyDataSetChanged()
-//    }
-//}

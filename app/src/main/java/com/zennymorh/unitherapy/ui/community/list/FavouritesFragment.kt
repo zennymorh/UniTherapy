@@ -9,88 +9,55 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.DATABASE_REFS
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Favorite
+import com.zennymorh.unitherapy.model.Posts
 import com.zennymorh.unitherapy.model.User
 import com.zennymorh.unitherapy.ui.community.FavoritesAdapter
+import kotlinx.android.synthetic.main.fragment_list.*
 
 class FavouriteFragment : Fragment() {
 
-    private lateinit var favFragment : View
-
-    private lateinit var database: FirebaseFirestore
-    private lateinit var favRecycler: RecyclerView
-    private lateinit var favList: ArrayList<User>
-    private lateinit var favAdapter: FavoritesAdapter
+    lateinit var favAdapter: FavoritesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        favFragment = inflater.inflate(R.layout.fragment_list, container, false)
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
 
-        val database = FirebaseFirestore.getInstance()
-        val query = database.collection("users").orderBy("name")
-        val options = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        favRecycler = favFragment.findViewById(R.id.list_community)
+        val firestore = FirebaseFirestore.getInstance()
+        val query = firestore.collection("users").document(Firebase.auth.currentUser?.uid.toString())
+            .collection("favorites")
+        val options = FirestoreRecyclerOptions.Builder<Posts>().setQuery(query, Posts::class.java).build()
 
         favAdapter = FavoritesAdapter(options)
-        favRecycler.apply {
+
+        list_community.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             adapter = favAdapter
             setHasFixedSize(true)
         }
-
-        favList = arrayListOf()
-
-        return favFragment
     }
 
     override fun onStart() {
         super.onStart()
-
         favAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-
         favAdapter.stopListening()
     }
 
-
-
-//    private fun getFavorites() {
-//
-//        val database = FirebaseFirestore.getInstance()
-//        val query = database.collection("users").orderBy("name")
-//        val options = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
-//
-////        database.collection("users")
-//
-////        database = FirebaseDatabase.getInstance().getReference(DATABASE_REFS)
-//
-////        database.addValueEventListener(object : ValueEventListener{
-////            override fun onDataChange(snapshot: DataSnapshot) {
-////                if (snapshot.exists()) {
-////                    for (i in snapshot.children) {
-////                        val fav = i.getValue(Favorite::class.java)
-////
-////                        favAdapter.updateCommunityList(favList)
-////                        favList.add(fav!!)
-////                    }
-////                }
-////            }
-////
-////            override fun onCancelled(error: DatabaseError) {
-////                TODO("Not yet implemented")
-////            }
-////
-////        })
-//    }
 }

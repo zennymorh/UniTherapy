@@ -3,6 +3,7 @@ package com.zennymorh.unitherapy.model
 import android.os.Parcelable
 import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 import kotlinx.android.parcel.RawValue
 
 @Parcelize
@@ -24,8 +25,10 @@ data class User(
 
 @Parcelize
 data class Posts(
+    val postId: String? = null,
     val name: String? = null,
-    val post: String? = null
+    val post: String? = null,
+    val timestamp: Long? = null
 ): Parcelable
 
 @Parcelize
