@@ -15,6 +15,7 @@ import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Posts
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.fragment_post.*
+import java.sql.Timestamp
 import java.util.ArrayList
 
 class PostFragment : Fragment() {
@@ -44,55 +45,38 @@ class PostFragment : Fragment() {
         post_button.setOnClickListener {
 
             if (edit_post.text.isEmpty()) {
-                Toast.makeText(requireContext(), "Type post", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Can't make empty post", Toast.LENGTH_LONG).show()
             } else {
+                if (userId != null) {
+                    database.collection("users").document(userId).get()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
 
-                database.collection("users")
-                    .document("posts")
-                    .get()
-                    .addOnSuccessListener { snapshot ->
+                                val document = task.result
 
-                        if (userId != null) {
-                            database.collection("users").document(userId).get()
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
+                                val name = document?.getString("name").toString()
+                                val postContent = edit_post.text.toString()
 
-                                        val document = task.result
+                                val timestamp = System.currentTimeMillis()
 
-                                        val name = document?.getString("name").toString()
-                                        val postContent = edit_post.text.toString()
 
-                                        val post = Posts(
-                                            name = name,
-                                            post = postContent
-                                        )
+                                val postId = "$userId:$timestamp"
 
-                                        if (snapshot.exists()) {
-                                            database.collection("users").document("posts")
-                                                .update("posts", FieldValue.arrayUnion(post))
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(requireContext(), "posted successfully", Toast.LENGTH_LONG).show()
-                                                    activity?.onBackPressed()
-                                                }
-                                        } else {
+                                val post = Posts(
+                                    postId = postId,
+                                    name = name,
+                                    post = postContent,
+                                    timestamp = timestamp
+                                )
 
-                                            val postDetail = HashMap<String, Any>()
-                                            val postList = ArrayList<Posts>()
-                                            postList.add(post)
-                                            postDetail["posts"] = postList
+                                database.collection("posts")
+                                    .document(postId)
+                                    .set(post)
 
-                                            database.collection("users").document("posts")
-                                                .set(postDetail)
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(requireContext(), "posted successfully", Toast.LENGTH_LONG).show()
-                                                    activity?.onBackPressed()
-                                                }
-                                        }
-
-                                    }
-                                }
+                                activity?.onBackPressed()
+                            }
                         }
-                    }
+                }
             }
         }
 

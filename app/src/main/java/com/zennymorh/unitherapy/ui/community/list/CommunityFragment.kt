@@ -3,46 +3,29 @@ package com.zennymorh.unitherapy.ui.community.list
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.model.Posts
 import com.zennymorh.unitherapy.model.User
-import com.zennymorh.unitherapy.ui.community.CommunityAdapter
-import kotlinx.android.synthetic.main.community_item.*
+import com.zennymorh.unitherapy.ui.therapist.TherapistAdapter
+import kotlinx.android.synthetic.main.fragment_list.*
+
 
 class CommunitiesFragment : Fragment() {
-//    private var communityArray = arrayListOf(
-//        User(
-//            id = "randomId",
-//            name = "Zainab Jimoh",
-//            post = "Feeling overwhelmed today,Send help"
-//        ),
-//        User(
-//            id = "randomId",
-//            name = "Ezichi Amarachi",
-//            post = "I heard something interesting today that we treat others unconsciously how we wanna " +
-//                    "be treated."
-//        ),
-//        User(
-//            id = "randomId",
-//            name = "Vivian Fatima",
-//            post = "I'm doing better today, and I am so proud of myself"
-//        ),
-//        User(
-//            id = "randomId",
-//            name = "Segun Famisa",
-//            post = "Have a good one guys!"
-//        )
-//    )
 
-//    private val communityAdapter = CommunityAdapter(
-//        communityArray
-//    ){
-//        // TODO: 18/07/2021
-//    }
+
+    lateinit var postsAdapter: PostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,10 +37,30 @@ class CommunitiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        (view as RecyclerView).adapter = communityAdapter
 
-        val prefs: SharedPreferences = requireContext().getSharedPreferences(requireContext().getString(R.string.app_name), Context.MODE_PRIVATE)
+        val firestore = FirebaseFirestore.getInstance()
+        val query = firestore.collection("posts")
+        val options = FirestoreRecyclerOptions.Builder<Posts>().setQuery(query, Posts::class.java).build()
 
-//        fav_button.isChecked = prefs.getBoolean("favButtonChecked", false)
+        postsAdapter = PostAdapter(options)
+
+        list_community.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            adapter = postsAdapter
+            setHasFixedSize(true)
+        }
+
+        Toast.makeText(requireContext(), Firebase.auth.currentUser?.uid.toString(), Toast.LENGTH_LONG).show()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        postsAdapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        postsAdapter.stopListening()
     }
 }
