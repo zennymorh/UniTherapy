@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
@@ -26,7 +27,8 @@ class ChatFragment : Fragment() {
 
     val chatMessages = ArrayList<Message>()
     var chatRegistration: ListenerRegistration? = null
-    var roomId: String? = null
+    private lateinit var roomId: String
+    private lateinit var receiverId: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,17 +64,21 @@ class ChatFragment : Fragment() {
     }
 
     private fun listenForChatMessages() {
-        roomId = arguments?.getString("roomId")
+        roomId = arguments?.getString("roomId").toString()
+        receiverId = arguments?.getString("receiverId").toString()
         if (roomId == null) {
             activity?.finish()
             return
         }
 
-        chatRegistration = firestore.collection("rooms")
-            .document(roomId!!)
+        Toast.makeText(requireActivity(), receiverId, Toast.LENGTH_SHORT).show()
+
+        chatRegistration = firestore.collection("users")
+            .document(user?.uid.toString())
+            .collection("rooms")
+            .document(roomId)
             .collection("messages")
             .addSnapshotListener { messageSnapshot, _ ->
-
                 if (messageSnapshot == null || messageSnapshot.isEmpty)
                     return@addSnapshotListener
 
@@ -81,8 +87,8 @@ class ChatFragment : Fragment() {
                 for (messageDocument in messageSnapshot.documents) {
                     chatMessages.add(
                         Message(
-                            messageDocument["text"] as String,
-                            messageDocument["user"] as String
+                            (messageDocument["text"] as? String).toString(),
+                            messageDocument["user"] as? String
                         )
                     )
                 }
@@ -96,12 +102,21 @@ class ChatFragment : Fragment() {
         val message = editText_message.text.toString()
         editText_message.setText("")
 
-        firestore.collection("rooms").document(roomId!!).collection("messages")
+        firestore.collection("users").document(user?.uid.toString())
+            .collection("rooms").document(roomId).collection("messages")
             .add(mapOf(
                 Pair("text", message),
-                Pair("user", user?.uid)
+                Pair("sender", user?.uid)
 //                Pair("timestamp", Timestamp.now())
             ))
+
+//        firestore.collection("users").document(receiverId)
+//            .collection("rooms").document(roomId).collection("messages")
+//            .add(mapOf(
+//                Pair("text", message),
+//                Pair("sender", user?.uid)
+////                Pair("timestamp", Timestamp.now())
+//            ))
     }
 
     private fun checkUser() {

@@ -31,5 +31,6 @@ data class Posts(
 @Parcelize
 data class Message(
     val messageText: String = "",
-    val user: String
+    val user: String? = null,
+    val receiver: String? = null
 ): Parcelable
