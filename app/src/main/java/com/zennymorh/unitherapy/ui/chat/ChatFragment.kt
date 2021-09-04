@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -16,8 +15,6 @@ import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.auth.AuthActivity
 import com.zennymorh.unitherapy.model.Message
 import kotlinx.android.synthetic.main.fragment_chat.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ChatFragment : Fragment() {
 
@@ -64,7 +61,8 @@ class ChatFragment : Fragment() {
     }
 
     private fun listenForChatMessages() {
-        roomId = arguments?.getString("roomId").toString()
+        roomId = arguments?.getString("roomId") ?: user!!.uid
+
         receiverId = arguments?.getString("receiverId").toString()
         if (roomId == null) {
             activity?.finish()
@@ -73,8 +71,19 @@ class ChatFragment : Fragment() {
 
         Toast.makeText(requireActivity(), receiverId, Toast.LENGTH_SHORT).show()
 
-        chatRegistration = firestore.collection("users")
-            .document(user?.uid.toString())
+        firestore.collection("users")
+            .document("chats")
+            .collection("rooms")
+            .document(roomId)
+            .set(
+                mapOf(
+                    Pair("roomId", roomId)
+                )
+            )
+
+        chatRegistration = firestore
+            .collection("users")
+            .document("chats")
             .collection("rooms")
             .document(roomId)
             .collection("messages")
@@ -102,13 +111,18 @@ class ChatFragment : Fragment() {
         val message = editText_message.text.toString()
         editText_message.setText("")
 
-        firestore.collection("users").document(user?.uid.toString())
-            .collection("rooms").document(roomId).collection("messages")
-            .add(mapOf(
-                Pair("text", message),
-                Pair("sender", user?.uid)
+        firestore.collection("users")
+            .document("chats")
+            .collection("rooms")
+            .document(roomId)
+            .collection("messages")
+            .add(
+                mapOf(
+                    Pair("text", message),
+                    Pair("sender", user?.uid)
 //                Pair("timestamp", Timestamp.now())
-            ))
+                )
+            )
 
 //        firestore.collection("users").document(receiverId)
 //            .collection("rooms").document(roomId).collection("messages")
