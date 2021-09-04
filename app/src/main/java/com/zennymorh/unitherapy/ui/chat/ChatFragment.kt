@@ -61,29 +61,28 @@ class ChatFragment : Fragment() {
     }
 
     private fun listenForChatMessages() {
-        roomId = arguments?.getString("roomId") ?: user!!.uid
+        roomId = arguments?.getString("roomId").toString()
 
         receiverId = arguments?.getString("receiverId").toString()
-        if (roomId == null) {
-            activity?.finish()
-            return
-        }
 
-        Toast.makeText(requireActivity(), receiverId, Toast.LENGTH_SHORT).show()
+        val therapistName = arguments?.getString("therapistName").toString()
+
+        Toast.makeText(requireActivity(), roomId, Toast.LENGTH_SHORT).show()
 
         firestore.collection("users")
-            .document("chats")
+            .document(user?.uid.toString())
             .collection("rooms")
             .document(roomId)
             .set(
                 mapOf(
-                    Pair("roomId", roomId)
+                    Pair("roomId", roomId),
+                    Pair("therapistName", therapistName)
                 )
             )
 
         chatRegistration = firestore
             .collection("users")
-            .document("chats")
+            .document(user?.uid.toString())
             .collection("rooms")
             .document(roomId)
             .collection("messages")
@@ -102,7 +101,6 @@ class ChatFragment : Fragment() {
                     )
                 }
 
-//                chatMessages.sortBy { it.timestamp }
                 recycler_view_messages.adapter?.notifyDataSetChanged()
             }
     }
@@ -112,25 +110,17 @@ class ChatFragment : Fragment() {
         editText_message.setText("")
 
         firestore.collection("users")
-            .document("chats")
+            .document(user?.uid.toString())
             .collection("rooms")
             .document(roomId)
             .collection("messages")
             .add(
-                mapOf(
-                    Pair("text", message),
-                    Pair("sender", user?.uid)
-//                Pair("timestamp", Timestamp.now())
+            Message(
+                messageText = message,
+                user = user?.uid,
+                receiver = receiverId
                 )
             )
-
-//        firestore.collection("users").document(receiverId)
-//            .collection("rooms").document(roomId).collection("messages")
-//            .add(mapOf(
-//                Pair("text", message),
-//                Pair("sender", user?.uid)
-////                Pair("timestamp", Timestamp.now())
-//            ))
     }
 
     private fun checkUser() {

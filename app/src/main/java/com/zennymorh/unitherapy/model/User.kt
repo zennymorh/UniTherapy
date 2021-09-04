@@ -33,7 +33,13 @@ data class Posts(
 
 @Parcelize
 data class Message(
-    val messageText: String = "",
     val user: String? = null,
-    val receiver: String? = null
+    val receiver: String? = null,
+    val messageText: String = ""
+): Parcelable
+
+@Parcelize
+data class Rooms(
+    val roomId: String = "",
+    val therapistName: String = ""
 ): Parcelable
