@@ -67,7 +67,6 @@ class SignUpFragment : Fragment() {
                     if (task.isSuccessful) {
                         handleSignUpSuccess(name, email)
                         progressDialog.dismiss()
-                        findNavController().navigate(R.id.action_signUpFragment_to_therapistFragment)
                     } else {
                         handleSignUpFailure(task)
                         progressDialog.dismiss()

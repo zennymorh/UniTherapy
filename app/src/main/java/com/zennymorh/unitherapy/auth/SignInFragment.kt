@@ -50,8 +50,6 @@ class SignInFragment : Fragment() {
         GoogleSignIn.getClient(this.requireActivity(), gso)
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,9 +95,9 @@ class SignInFragment : Fragment() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
                         progressDialog.dismiss()
-                        findNavController().navigate(R.id.action_signInFragment_to_therapistFragment)
+                        val intent = Intent(this.activity, MainActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(
                             context,
@@ -127,6 +125,8 @@ class SignInFragment : Fragment() {
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
+        val intent = Intent(this.activity, MainActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -154,7 +154,6 @@ class SignInFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
                     val intent = Intent(this.activity, MainActivity::class.java)
                     startActivity(intent)
                 } else {

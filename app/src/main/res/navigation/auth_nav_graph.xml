@@ -16,9 +16,6 @@
         <action
             android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
-        <action
-            android:id="@+id/action_signInFragment_to_therapistFragment"
-            app:destination="@id/therapistFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -28,9 +25,6 @@
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_therapistFragment"
-            app:destination="@id/therapistFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -41,9 +35,4 @@
             android:id="@+id/action_forgotPasswordFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/therapistFragment"
-        android:name="com.zennymorh.unitherapy.ui.therapist.TherapistFragment"
-        android:label="fragment_therapist"
-        tools:layout="@layout/fragment_therapist" />
 </navigation>
