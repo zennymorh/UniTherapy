@@ -99,6 +99,7 @@ class SignInFragment : Fragment() {
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                         progressDialog.dismiss()
+                        findNavController().navigate(R.id.action_signInFragment_to_therapistFragment)
                     } else {
                         Toast.makeText(
                             context,
