@@ -1,4 +1,4 @@
-package com.zennymorh.unitherapy.ui.community.list
+package com.zennymorh.unitherapy.ui.chat
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,29 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Posts
-import com.zennymorh.unitherapy.model.User
-import com.zennymorh.unitherapy.ui.community.FavoritesAdapter
-import kotlinx.android.synthetic.main.fragment_list.*
+import com.zennymorh.unitherapy.model.Rooms
+import kotlinx.android.synthetic.main.fragment_rooms_list.*
 
-class FavouriteFragment : Fragment() {
+class RoomsListFragment : Fragment() {
 
-    lateinit var favAdapter: FavoritesAdapter
+    lateinit var roomsListAdapter: RoomsListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_rooms_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,26 +32,25 @@ class FavouriteFragment : Fragment() {
 
         val firestore = FirebaseFirestore.getInstance()
         val query = firestore.collection("users").document(Firebase.auth.currentUser?.uid.toString())
-            .collection("favorites")
-        val options = FirestoreRecyclerOptions.Builder<Posts>().setQuery(query, Posts::class.java).build()
+            .collection("rooms")
+        val options = FirestoreRecyclerOptions.Builder<Rooms>().setQuery(query, Rooms::class.java).build()
 
-        favAdapter = FavoritesAdapter(options)
+        roomsListAdapter = RoomsListAdapter(options)
 
-        list_community.apply {
+        rooms_list.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            adapter = favAdapter
+            adapter = roomsListAdapter
             setHasFixedSize(true)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        favAdapter.startListening()
+        roomsListAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-        favAdapter.stopListening()
+        roomsListAdapter.stopListening()
     }
-
 }

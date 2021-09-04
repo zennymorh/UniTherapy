@@ -47,10 +47,20 @@
         <action
             android:id="@+id/action_therapistDetailFragment_to_navigation_chat"
             app:destination="@id/navigation_chat" />
+
     </fragment>
     <fragment
         android:id="@+id/postFragment"
         android:name="com.zennymorh.unitherapy.ui.community.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" />
+    <fragment
+        android:id="@+id/roomsListFragment"
+        android:name="com.zennymorh.unitherapy.ui.chat.RoomsListFragment"
+        android:label="RoomsListFragment"
+        tools:layout="@layout/fragment_rooms_list">
+        <action
+            android:id="@+id/action_roomsListFragment_to_navigation_chat"
+            app:destination="@id/navigation_chat" />
+    </fragment>
 </navigation>

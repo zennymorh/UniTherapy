@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.model.Message
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.fragment_therapist_detail.*
 
@@ -40,28 +42,56 @@ class TherapistDetailFragment : Fragment() {
 
         bind(therapist)
 
-        val roomId: String = if (therapist.isTherapist) therapist.id!! else auth!!
+//        val roomId: String = if (therapist.isTherapist) therapist.id!! else auth!!
 
-        chatFAB.setOnClickListener {
+        val navHostFragment = fragmentManager?.findFragmentById(R.id.therapistDetailFragment)
+        val navController = navHostFragment?.findNavController()
+
+        val roomId = therapist.id+auth
+
+        chatFAB.setOnClickListener { chat_fab ->
             Log.d("FUCKKKK", roomId)
-            if (roomId.isEmpty()) {
-                return@setOnClickListener
-            } else {
-                firestore.collection("users")
-                    .document("chats")
-                    .collection("rooms")
-                    .document(roomId)
-                    .set(
-                        mapOf(
-                            Pair("roomId", roomId)
-                        )
-                    )
-            }
 
             val bundle = bundleOf(
                 "roomId" to roomId,
-                "receiverId" to therapist.id.toString()
+                "receiverId" to therapist.id,
+                "therapistName" to therapist.name
             )
+
+            if (roomId.isEmpty()) {
+                return@setOnClickListener
+            } else {
+
+                firestore.collection("users")
+                    .document(auth.toString())
+                    .collection("rooms")
+                    .document(roomId)
+                    .get()
+                    .addOnSuccessListener { document1 ->
+                        if (document1.exists()) {
+                            navController?.navigate(
+                                TherapistDetailFragmentDirections.actionTherapistDetailFragmentToNavigationChat(roomId)
+                            )
+                        } else {
+                            firestore.collection("users")
+                                .document(auth.toString())
+                                .collection("rooms")
+                                .document(roomId)
+                                .set(
+                                    mapOf(
+                                        Pair("roomId", roomId),
+                                        Pair("therapistName", therapist.name)
+                                    )
+                                )
+
+                            navController?.navigate(
+                                TherapistDetailFragmentDirections.actionTherapistDetailFragmentToNavigationChat(roomId)
+                            )
+                        }
+                    }
+
+
+            }
 
             findNavController().navigate(
                 R.id.action_therapistDetailFragment_to_navigation_chat,
