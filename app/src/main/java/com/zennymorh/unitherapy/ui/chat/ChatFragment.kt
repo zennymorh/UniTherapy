@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -15,6 +16,8 @@ import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.auth.AuthActivity
 import com.zennymorh.unitherapy.model.Message
 import kotlinx.android.synthetic.main.fragment_chat.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatFragment : Fragment() {
 
@@ -97,12 +100,13 @@ class ChatFragment : Fragment() {
                     chatMessages.add(
                         Message(
                             (messageDocument["text"] as? String).toString(),
-                            messageDocument["user"] as? String
+                            messageDocument["user"] as? String,
+                            messageDocument.getTimestamp("timestamp")!!.toDate()
                         )
                     )
                 }
 
-//                chatMessages.sortBy { it.timestamp }
+                chatMessages.sortBy { it.timestamp }
                 recycler_view_messages.adapter?.notifyDataSetChanged()
             }
     }
@@ -119,18 +123,10 @@ class ChatFragment : Fragment() {
             .add(
                 mapOf(
                     Pair("text", message),
-                    Pair("sender", user?.uid)
-//                Pair("timestamp", Timestamp.now())
+                    Pair("sender", user?.uid),
+                    Pair("timestamp", Timestamp.now())
                 )
             )
-
-//        firestore.collection("users").document(receiverId)
-//            .collection("rooms").document(roomId).collection("messages")
-//            .add(mapOf(
-//                Pair("text", message),
-//                Pair("sender", user?.uid)
-////                Pair("timestamp", Timestamp.now())
-//            ))
     }
 
     private fun checkUser() {

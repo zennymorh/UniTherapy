@@ -5,15 +5,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.firebase.auth.FirebaseAuth
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Message
-import kotlinx.android.synthetic.main.list_item_chat.view.*
+import androidx.navigation.fragment.navArgs
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ChatAdapter(private val chatMessages: List<Message>, private val uid: String): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+
+const val VIEW_TYPE_MY_MESSAGE = 1
+private const val VIEW_TYPE_OTHER_MESSAGE = 2
+
+class ChatAdapter(private val chatMessages: List<Message>, private val uid: String):
+    RecyclerView.Adapter<ViewHolder>() {
+
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
+    val firestore = FirebaseFirestore.getInstance()
+    val args: ChatFragmentArgs by lazy { args }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater, parent)
+        var view: View?
+        var viewHolder: ViewHolder? = null
+
+        if (viewType == VIEW_TYPE_MY_MESSAGE) {
+            view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_message_sent, parent, false);
+            viewHolder = SentViewHolder(view);
+        } else if (viewType == VIEW_TYPE_OTHER_MESSAGE) {
+            view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_message_received, parent, false);
+            viewHolder = ReceivedViewHolder(view);
+        }
+
+        return viewHolder!!
     }
 
     override fun getItemCount(): Int {
@@ -23,28 +48,53 @@ class ChatAdapter(private val chatMessages: List<Message>, private val uid: Stri
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val chatMessage = chatMessages[position]
 
-        if (chatMessage.user == uid) {
-            holder.itemView.textview_chat_sent.text = chatMessage.messageText
-            holder.itemView.textview_chat_received.visibility = View.GONE
-        } else {
-            holder.itemView.textview_chat_received.text = chatMessage.messageText
-            holder.itemView.textview_chat_sent.visibility = View.GONE
+        when (holder.itemViewType) {
+            VIEW_TYPE_MY_MESSAGE -> (holder as SentViewHolder).bind(chatMessage)
+            VIEW_TYPE_OTHER_MESSAGE -> (holder as ReceivedViewHolder).bind(chatMessage)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val message = chatMessages[position]
+        return if(user?.uid == message.receiver) {
+            VIEW_TYPE_MY_MESSAGE
+        }
+        else {
+            VIEW_TYPE_OTHER_MESSAGE
         }
     }
 
 
-    class ViewHolder(inflater: LayoutInflater, parent: ViewGroup): RecyclerView.ViewHolder(
-        inflater.inflate(R.layout.list_item_chat, parent, false)
-    ) {
+    class SentViewHolder(itemView: View) : ViewHolder(itemView) {
 
         private var chatTextSent: TextView? = null
-        private var chatTextReceived: TextView? = null
 
         init {
             chatTextSent = itemView.findViewById(R.id.textview_chat_sent)
+        }
+
+        fun bind(message: Message) {
+            chatTextSent?.text = message.messageText
+        }
+
+    }
+
+    class ReceivedViewHolder(itemView: View) : ViewHolder(itemView) {
+
+        private var chatTextReceived: TextView? = null
+
+        init {
             chatTextReceived = itemView.findViewById(R.id.textview_chat_received)
         }
 
+        fun bind(message: Message) {
+            chatTextReceived?.text = message.messageText
+        }
+
+    }
+
+    class EmptyViewHolder(itemView: View) : ViewHolder(itemView) {
+        //KILL ME NOW
     }
 
 }
