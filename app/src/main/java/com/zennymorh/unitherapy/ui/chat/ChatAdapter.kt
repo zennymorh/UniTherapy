@@ -9,7 +9,8 @@ import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Message
 import kotlinx.android.synthetic.main.list_item_chat.view.*
 
-class ChatAdapter(private val chatMessages: List<Message>, private val uid: String): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class ChatAdapter(private val chatMessages: List<Message>, private val uid: String):
+    RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
