@@ -30,14 +30,10 @@
         android:name="com.zennymorh.unitherapy.ui.chat.ChatFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat">
+
         <argument
             android:name="roomId"
-            app:argType="string" />
-
-        <argument
-            android:name="selectedTherapist"
-            app:argType="com.zennymorh.unitherapy.model.User" />
-
+            app:argType = "string" />
     </fragment>
 
     <fragment

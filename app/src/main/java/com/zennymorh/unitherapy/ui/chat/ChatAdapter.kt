@@ -22,7 +22,6 @@ class ChatAdapter(private val chatMessages: List<Message>, private val uid: Stri
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
     val firestore = FirebaseFirestore.getInstance()
-    val args: ChatFragmentArgs by lazy { args }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view: View?
@@ -91,10 +90,6 @@ class ChatAdapter(private val chatMessages: List<Message>, private val uid: Stri
             chatTextReceived?.text = message.messageText
         }
 
-    }
-
-    class EmptyViewHolder(itemView: View) : ViewHolder(itemView) {
-        //KILL ME NOW
     }
 
 }

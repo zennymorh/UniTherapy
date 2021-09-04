@@ -34,7 +34,7 @@ data class Posts(
 data class Message(
     val messageText: String = "",
     val user: String? = null,
-    val timestamp: Date,
+    val timestamp: Date?,
     val receiver: String? = null
 
 ): Parcelable

@@ -101,7 +101,7 @@ class ChatFragment : Fragment() {
                         Message(
                             (messageDocument["text"] as? String).toString(),
                             messageDocument["user"] as? String,
-                            messageDocument.getTimestamp("timestamp")!!.toDate()
+                            messageDocument.getTimestamp("timestamp")?.toDate()
                         )
                     )
                 }
