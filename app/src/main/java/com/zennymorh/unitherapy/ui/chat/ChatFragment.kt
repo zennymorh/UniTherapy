@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -15,6 +16,8 @@ import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.auth.AuthActivity
 import com.zennymorh.unitherapy.model.Message
 import kotlinx.android.synthetic.main.fragment_chat.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatFragment : Fragment() {
 
@@ -26,6 +29,7 @@ class ChatFragment : Fragment() {
     var chatRegistration: ListenerRegistration? = null
     private lateinit var roomId: String
     private lateinit var receiverId: String
+    private lateinit var therapistName: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,8 +41,6 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkUser()
-
         initList()
         setViewListeners()
 
@@ -65,9 +67,7 @@ class ChatFragment : Fragment() {
 
         receiverId = arguments?.getString("receiverId").toString()
 
-        val therapistName = arguments?.getString("therapistName").toString()
-
-        Toast.makeText(requireActivity(), roomId, Toast.LENGTH_SHORT).show()
+        therapistName = arguments?.getString("therapistName").toString()
 
         firestore.collection("users")
             .document(user?.uid.toString())
@@ -96,11 +96,13 @@ class ChatFragment : Fragment() {
                     chatMessages.add(
                         Message(
                             (messageDocument["text"] as? String).toString(),
-                            messageDocument["user"] as? String
+                            messageDocument["user"] as? String,
+                            messageDocument.getTimestamp("timestamp")?.toDate()
                         )
                     )
                 }
 
+                chatMessages.sortBy { it.timestamp }
                 recycler_view_messages.adapter?.notifyDataSetChanged()
             }
     }
@@ -115,24 +117,12 @@ class ChatFragment : Fragment() {
             .document(roomId)
             .collection("messages")
             .add(
-            Message(
-                messageText = message,
-                user = user?.uid,
-                receiver = receiverId
+                mapOf(
+                    Pair("text", message),
+                    Pair("sender", user?.uid),
+                    Pair("timestamp", Timestamp.now())
                 )
             )
-    }
-
-    private fun checkUser() {
-        if (user == null)
-            launchLogin()
-    }
-
-    private fun launchLogin() {
-        val intent = Intent(requireActivity(), AuthActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        activity?.finish()
     }
 
     override fun onDestroy() {

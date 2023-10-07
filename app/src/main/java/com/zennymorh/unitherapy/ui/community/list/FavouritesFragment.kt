@@ -13,7 +13,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.zennymorh.unitherapy.DATABASE_REFS
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Posts
 import com.zennymorh.unitherapy.model.User

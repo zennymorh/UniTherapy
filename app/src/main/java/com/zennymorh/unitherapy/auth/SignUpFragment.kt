@@ -91,7 +91,6 @@ class SignUpFragment : Fragment() {
 
     private fun handleSignUpSuccess(name: String, email: String) {
         Log.d(TAG, "createUserWithEmail:success")
-        // val user = auth.currentUser
 
         val db = Firebase.firestore
         val userId = auth.currentUser?.uid
