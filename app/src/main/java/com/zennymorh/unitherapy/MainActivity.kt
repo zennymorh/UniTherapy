@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val firestore = FirebaseFirestore.getInstance()
     private var storageRef = FirebaseStorage.getInstance().reference
     private val userId = Firebase.auth.currentUser?.uid
-    private val imagesRef = storageRef.child("images").child(userId!!)
+    private val imagesRef = userId?.let { storageRef.child("images").child(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
-        imagesRef.downloadUrl.addOnSuccessListener {
+        imagesRef?.downloadUrl?.addOnSuccessListener {
             Glide.with(this).load(it).into(imageOfUser)
         }
     }

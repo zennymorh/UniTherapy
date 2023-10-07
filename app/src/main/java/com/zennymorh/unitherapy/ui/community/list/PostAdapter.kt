@@ -61,7 +61,15 @@ class PostAdapter(options: FirestoreRecyclerOptions<Posts>):
                 timestamp = timestamp
             )
 
-            favBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+            db.collection("users").document(userId)
+                .collection("favorites").document(postId.toString()).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        favBtn.isChecked = true
+                    }
+                }
+
+            favBtn.setOnClickListener {
                 if (favBtn.isChecked) {
                     db.collection("users").document(userId)
                         .collection("favorites").document(postId.toString())

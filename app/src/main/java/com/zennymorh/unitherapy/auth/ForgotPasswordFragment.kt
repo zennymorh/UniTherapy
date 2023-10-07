@@ -19,12 +19,6 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class ForgotPasswordFragment : Fragment() {
 
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(activity).apply {
-            setCancelable(false)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,8 +45,7 @@ class ForgotPasswordFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
-            progressDialog.setMessage("Loading")
-            progressDialog.show()
+            indeterminateBar.transitionName = "Loading"
 
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
@@ -65,14 +58,14 @@ class ForgotPasswordFragment : Fragment() {
                         findNavController().navigate(
                             R.id.action_forgotPasswordFragment_to_signInFragment
                         )
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
                     } else {
                         Toast.makeText(
                             context,
                             "Something went wrong. ",
                             Toast.LENGTH_SHORT
                         ).show()
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener {
@@ -81,7 +74,7 @@ class ForgotPasswordFragment : Fragment() {
                         "I failed woefully",
                         Toast.LENGTH_SHORT
                     ).show()
-                    progressDialog.dismiss()
+                    indeterminateBar.visibility = View.GONE
                 }
                 .addOnSuccessListener {
                     Toast.makeText(
@@ -89,7 +82,7 @@ class ForgotPasswordFragment : Fragment() {
                         "I am successful in jesus' name",
                         Toast.LENGTH_SHORT
                     ).show()
-                    progressDialog.dismiss()
+                    indeterminateBar.visibility = View.GONE
                 }
         }
     }

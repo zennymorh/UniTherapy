@@ -6,18 +6,23 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import com.bumptech.glide.Glide
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -129,6 +134,8 @@ class ProfileActivity : AppCompatActivity() {
         database.collection("users")
             .document(userId!!)
             .set(user)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun saveImage() {

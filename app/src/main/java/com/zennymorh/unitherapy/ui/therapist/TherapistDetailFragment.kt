@@ -42,8 +42,6 @@ class TherapistDetailFragment : Fragment() {
 
         bind(therapist)
 
-//        val roomId: String = if (therapist.isTherapist) therapist.id!! else auth!!
-
         val navHostFragment = fragmentManager?.findFragmentById(R.id.therapistDetailFragment)
         val navController = navHostFragment?.findNavController()
 
@@ -76,17 +74,30 @@ class TherapistDetailFragment : Fragment() {
                             firestore.collection("users")
                                 .document(auth.toString())
                                 .collection("rooms")
-                                .document(roomId)
-                                .set(
-                                    mapOf(
-                                        Pair("roomId", roomId),
-                                        Pair("therapistName", therapist.name)
-                                    )
-                                )
+                                .document(auth+therapist.id)
+                                .get()
+                                .addOnSuccessListener { document2 ->
+                                    if (document2.exists()) {
+                                        navController?.navigate(
+                                            TherapistDetailFragmentDirections.actionTherapistDetailFragmentToNavigationChat(auth+therapist.id)
+                                        )
+                                    } else {
+                                        firestore.collection("users")
+                                            .document(auth.toString())
+                                            .collection("rooms")
+                                            .document(roomId)
+                                            .set(
+                                                mapOf(
+                                                    Pair("roomId", roomId),
+                                                    Pair("therapistName", therapist.name)
+                                                )
+                                            )
 
-                            navController?.navigate(
-                                TherapistDetailFragmentDirections.actionTherapistDetailFragmentToNavigationChat(roomId)
-                            )
+                                        navController?.navigate(
+                                            TherapistDetailFragmentDirections.actionTherapistDetailFragmentToNavigationChat(roomId)
+                                        )
+                                    }
+                                }
                         }
                     }
 
@@ -103,13 +114,13 @@ class TherapistDetailFragment : Fragment() {
     private fun bind(therapist: User) {
         user_name.text = therapist.name
         user_therapy_type.text = therapist.title
-        user_desc_TV.text = therapist.fullDesc
+        user_desc_TV.text = therapist.bio
         work_exp.text = therapist.workExp
         hobbies.text = therapist.hobbies
         therapist.backgroundImg?.let { profileImage.setImageResource(it) }
 
         imagesRef.child(therapist.id.toString()).downloadUrl.addOnSuccessListener {
-            Glide.with(this).load(it).into(profileImage)
+            this.activity?.let { it1 -> Glide.with(it1).load(it).into(profileImage) }
         }
 
     }

@@ -125,8 +125,6 @@ class SignInFragment : Fragment() {
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-        val intent = Intent(this.activity, MainActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

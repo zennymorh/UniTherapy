@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.fragment_list.*
 
 
 class CommunitiesFragment : Fragment() {
-
-
     lateinit var postsAdapter: PostAdapter
 
     override fun onCreateView(
@@ -49,9 +47,6 @@ class CommunitiesFragment : Fragment() {
             adapter = postsAdapter
             setHasFixedSize(true)
         }
-
-        Toast.makeText(requireContext(), Firebase.auth.currentUser?.uid.toString(), Toast.LENGTH_LONG).show()
-
     }
 
     override fun onStart() {

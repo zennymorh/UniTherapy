@@ -29,6 +29,7 @@ class ChatFragment : Fragment() {
     var chatRegistration: ListenerRegistration? = null
     private lateinit var roomId: String
     private lateinit var receiverId: String
+    private lateinit var therapistName: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +41,6 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkUser()
-
         initList()
         setViewListeners()
 
@@ -68,9 +67,7 @@ class ChatFragment : Fragment() {
 
         receiverId = arguments?.getString("receiverId").toString()
 
-        val therapistName = arguments?.getString("therapistName").toString()
-
-        Toast.makeText(requireActivity(), roomId, Toast.LENGTH_SHORT).show()
+        therapistName = arguments?.getString("therapistName").toString()
 
         firestore.collection("users")
             .document(user?.uid.toString())
@@ -126,18 +123,6 @@ class ChatFragment : Fragment() {
                     Pair("timestamp", Timestamp.now())
                 )
             )
-    }
-
-    private fun checkUser() {
-        if (user == null)
-            launchLogin()
-    }
-
-    private fun launchLogin() {
-        val intent = Intent(requireActivity(), AuthActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        activity?.finish()
     }
 
     override fun onDestroy() {
