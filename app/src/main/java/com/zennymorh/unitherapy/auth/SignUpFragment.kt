@@ -1,6 +1,5 @@
 package com.zennymorh.unitherapy.auth
 
-import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -21,16 +20,12 @@ import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.User
+import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(activity).apply {
-            setCancelable(false)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,24 +47,22 @@ class SignUpFragment : Fragment() {
 
         signUpBtn.setOnClickListener {
             val name = userNameET.text.toString()
-            val email = emailAddressET.text.toString()
-            val password = passwordET.text.toString()
+            val email = emailAddressInput.text.toString()
+            val password = passwordInput.text.toString()
 
             if (!isValidEntry(name, email, password)) {
                 return@setOnClickListener
             }
 
-            progressDialog.setMessage("Creating user")
-            progressDialog.show()
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         handleSignUpSuccess(name, email)
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
                     } else {
                         handleSignUpFailure(task)
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
                     }
                 }
         }
@@ -112,11 +105,7 @@ class SignUpFragment : Fragment() {
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error writing document", e)
-                Toast.makeText(
-                    context,
-                    "Adding to DB failed.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, "Adding to DB failed.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -125,31 +114,23 @@ class SignUpFragment : Fragment() {
         email: String,
         password: String
     ): Boolean {
-        if (name.isEmpty()) {
-            Toast.makeText(
-                context,
-                "Enter a valid name",
-                Toast.LENGTH_SHORT
-            ).show()
-            return false
-        }
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(
-                context,
-                "Enter a valid email address",
-                Toast.LENGTH_SHORT
-            ).show()
-            return false
-        }
 
-        if (password.isEmpty()) {
-            Toast.makeText(
-                context,
-                "Enter a valid password",
-                Toast.LENGTH_SHORT
-            ).show()
-            return false
+        return when {
+            name.isEmpty() -> {
+                Toast.makeText(context, "Enter a valid name", Toast.LENGTH_SHORT).show()
+                false
+            }
+            email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                Toast.makeText(context, "Enter a valid name", Toast.LENGTH_SHORT).show()
+                false
+            }
+            password.isEmpty() -> {
+                Toast.makeText(context, "Enter a valid password", Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> {
+                true
+            }
         }
-        return true
     }
 }

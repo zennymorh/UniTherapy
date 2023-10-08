@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".auth.SignInFragment">
 
+    <ProgressBar
+        android:id="@+id/indeterminateBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/appName"
         android:layout_width="wrap_content"
@@ -28,7 +40,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/lightBlue"
-        android:text="Log In"
+        android:text="@string/log_in"
         app:elevation="2dp"
         app:icon="@drawable/google_logo"
         app:iconTint="@android:color/transparent"
@@ -42,16 +54,16 @@
         android:layout_width="120dp"
         android:layout_height="1dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/loginWithEmailTV"
-        app:layout_constraintEnd_toStartOf="@+id/loginWithEmailTV"
+        app:layout_constraintBottom_toBottomOf="@+id/logInWithEmail"
+        app:layout_constraintEnd_toStartOf="@+id/logInWithEmail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/loginWithEmailTV" />
+        app:layout_constraintTop_toTopOf="@+id/logInWithEmail" />
 
     <TextView
-        android:id="@+id/loginWithEmailTV"
+        android:id="@+id/logInWithEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in with email"
+        android:text="@string/log_in_with_email"
         android:textSize="12sp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -65,13 +77,13 @@
         android:layout_width="120dp"
         android:layout_height="1dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/loginWithEmailTV"
+        app:layout_constraintBottom_toBottomOf="@+id/logInWithEmail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/loginWithEmailTV"
-        app:layout_constraintTop_toTopOf="@+id/loginWithEmailTV" />
+        app:layout_constraintStart_toEndOf="@+id/logInWithEmail"
+        app:layout_constraintTop_toTopOf="@+id/logInWithEmail" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailAddressTV"
+        android:id="@+id/emailAddress"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,16 +95,16 @@
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginWithEmailTV">
+        app:layout_constraintTop_toBottomOf="@+id/logInWithEmail">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailAddressET"
+            android:id="@+id/emailAddressInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTV"
+        android:id="@+id/password"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,10 +115,10 @@
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailAddressTV">
+        app:layout_constraintTop_toBottomOf="@+id/emailAddress">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordET"
+            android:id="@+id/passwordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -117,12 +129,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Forgot password?"
+        android:text="@string/forgot_password"
         android:textColor="@color/lightPurple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.946"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordTV" />
+        app:layout_constraintTop_toBottomOf="@id/password" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signInBtn"
@@ -131,18 +143,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        android:text="Continue"
-        app:layout_constraintBottom_toTopOf="@+id/firstTimeTV"
+        android:text="@string/continue_text"
+        app:layout_constraintBottom_toTopOf="@+id/firstTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/firstTimeTV"
+        android:id="@+id/firstTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="152dp"
-        android:text="First time?"
+        android:text="@string/first_time"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -150,15 +162,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/signUpTxt"
+        android:id="@+id/signUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/sign_up_tv"
         android:textColor="@color/lightPurple"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/firstTimeTV"
+        app:layout_constraintBottom_toBottomOf="@id/firstTime"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/firstTimeTV"
-        app:layout_constraintTop_toTopOf="@id/firstTimeTV" />
+        app:layout_constraintStart_toEndOf="@id/firstTime"
+        app:layout_constraintTop_toTopOf="@id/firstTime" />
 </androidx.constraintlayout.widget.ConstraintLayout>

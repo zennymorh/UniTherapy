@@ -1,6 +1,5 @@
 package com.zennymorh.unitherapy.auth
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -8,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
-import kotlinx.android.synthetic.main.fragment_forgot_password.*
-import kotlinx.android.synthetic.main.fragment_sign_in.*
+import kotlinx.android.synthetic.main.fragment_forgot_password.proceedBtn
+import kotlinx.android.synthetic.main.fragment_forgot_password.emailInput
+import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
 
 class ForgotPasswordFragment : Fragment() {
 
@@ -36,7 +35,7 @@ class ForgotPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         proceedBtn.setOnClickListener {
-            val email = emailET.text.toString()
+            val email = emailInput.text.toString()
             if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(
                     context,
@@ -61,27 +60,16 @@ class ForgotPasswordFragment : Fragment() {
                         indeterminateBar.visibility = View.GONE
                     } else {
                         Toast.makeText(
-                            context,
-                            "Something went wrong. ",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            context, "Something went wrong. ", Toast.LENGTH_SHORT).show()
                         indeterminateBar.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(
-                        context,
-                        "I failed woefully",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
                     indeterminateBar.visibility = View.GONE
                 }
                 .addOnSuccessListener {
-                    Toast.makeText(
-                        context,
-                        "I am successful in jesus' name",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
                     indeterminateBar.visibility = View.GONE
                 }
         }

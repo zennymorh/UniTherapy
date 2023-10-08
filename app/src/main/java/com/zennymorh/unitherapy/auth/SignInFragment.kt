@@ -1,6 +1,5 @@
 package com.zennymorh.unitherapy.auth
 
-import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -21,9 +20,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
-import kotlinx.android.synthetic.main.fragment_sign_in.*
-import kotlinx.android.synthetic.main.fragment_sign_in.emailAddressET
-import kotlinx.android.synthetic.main.fragment_sign_in.passwordET
+import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
+import kotlinx.android.synthetic.main.fragment_sign_in.signInBtn
+import kotlinx.android.synthetic.main.fragment_sign_in.signUp
+import kotlinx.android.synthetic.main.fragment_sign_in.signInGoogleBtn
+import kotlinx.android.synthetic.main.fragment_sign_in.forgotPasswordTV
+import kotlinx.android.synthetic.main.fragment_sign_in.emailAddressInput
+import kotlinx.android.synthetic.main.fragment_sign_in.passwordInput
 
 class SignInFragment : Fragment() {
 
@@ -32,11 +35,7 @@ class SignInFragment : Fragment() {
     }
 
     private lateinit var auth: FirebaseAuth
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(activity).apply {
-            setCancelable(false)
-        }
-    }
+
     private val gso by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -69,33 +68,26 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         signInBtn.setOnClickListener {
-            val email = emailAddressET.text.toString()
-            val password = passwordET.text.toString()
+            indeterminateBar.visibility = View.VISIBLE
+
+
+            val email = emailAddressInput.text.toString()
+            val password = passwordInput.text.toString()
             if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(
-                    context,
-                    "Enter a valid email address",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, "Enter a valid email address", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (password.isEmpty()) {
-                Toast.makeText(
-                    context,
-                    "Enter a valid password",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, "Enter a valid password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            progressDialog.setMessage("Signing In")
-            progressDialog.show()
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
+
                         val intent = Intent(this.activity, MainActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -104,12 +96,12 @@ class SignInFragment : Fragment() {
                             "Authentication failed." + task.exception?.message,
                             Toast.LENGTH_SHORT
                         ).show()
-                        progressDialog.dismiss()
+                        indeterminateBar.visibility = View.GONE
                     }
                 }
         }
 
-        signUpTxt.setOnClickListener {
+        signUp.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
         }
 

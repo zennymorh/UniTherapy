@@ -7,7 +7,7 @@
     <string name="name">Name</string>
     <string name="email_address_tv">Email Address</string>
     <string name="password_tv">Password</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chat">Chat</string>
     <string name="community">Community</string>
@@ -22,6 +22,13 @@
         just if you need a listening ear. I am kind, I definitely do not judge, My pronouns are she/her.
         I would like you to know that tough times never last, tough people do.
         It\'s only a cliche cause it\'s true.</string>
+
     <string name="work_experience">Work Experience</string>
     <string name="hobbies">Hobbies</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="proceed">Proceed</string>
+    <string name="log_in">Log In</string>
+    <string name="log_in_with_email">Log in with email</string>
+    <string name="continue_text">Continue</string>
+    <string name="first_time">First time?</string>
 </resources>
