@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -16,9 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
-import com.zennymorh.unitherapy.model.Message
+import com.zennymorh.unitherapy.databinding.FragmentTherapistDetailBinding
 import com.zennymorh.unitherapy.model.User
-import kotlinx.android.synthetic.main.fragment_therapist_detail.*
 
 class TherapistDetailFragment : Fragment() {
 
@@ -27,13 +25,18 @@ class TherapistDetailFragment : Fragment() {
     private val imagesRef = storageRef.child("images")
     private val auth = Firebase.auth.currentUser?.uid
     val firestore = FirebaseFirestore.getInstance()
+    private var _binding: FragmentTherapistDetailBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_therapist_detail, container, false)
+        _binding = FragmentTherapistDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +50,7 @@ class TherapistDetailFragment : Fragment() {
 
         val roomId = therapist.id+auth
 
-        chatFAB.setOnClickListener { chat_fab ->
+        binding.chatFAB.setOnClickListener { chat_fab ->
             Log.d("FUCKKKK", roomId)
 
             val bundle = bundleOf(
@@ -112,15 +115,15 @@ class TherapistDetailFragment : Fragment() {
     }
 
     private fun bind(therapist: User) {
-        user_name.text = therapist.name
-        user_therapy_type.text = therapist.title
-        user_desc_TV.text = therapist.bio
-        work_exp.text = therapist.workExp
-        hobbies.text = therapist.hobbies
-        therapist.backgroundImg?.let { profileImage.setImageResource(it) }
+        binding.userName.text = therapist.name
+        binding.userTherapyType.text = therapist.title
+        binding.userDescTV.text = therapist.bio
+        binding.workExp.text = therapist.workExp
+        binding.hobbies.text = therapist.hobbies
+        therapist.backgroundImg?.let { binding.profileImage.setImageResource(it) }
 
         imagesRef.child(therapist.id.toString()).downloadUrl.addOnSuccessListener {
-            this.activity?.let { it1 -> Glide.with(it1).load(it).into(profileImage) }
+            this.activity?.let { it1 -> Glide.with(it1).load(it).into(binding.profileImage) }
         }
 
     }

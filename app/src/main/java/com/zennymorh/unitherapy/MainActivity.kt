@@ -2,12 +2,10 @@ package com.zennymorh.unitherapy
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -15,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -24,14 +21,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.auth.AuthActivity
+import com.zennymorh.unitherapy.databinding.ActivityMainBinding
 import com.zennymorh.unitherapy.ui.profile.ProfileActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var auth: FirebaseAuth
     lateinit var bottomNav: BottomNavigationView
@@ -45,30 +40,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         auth = Firebase.auth
 
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(mainActivityToolbar)
-        bottomNav = bottom_nav_view
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+//        setSupportActionBar(binding.mainActivityToolbar)
+//        bottomNav = binding.bottom_nav_view
+
 
         navController = findNavController(R.id.nav_host_fragment)
         setupBottomNavigation()
 
-        drawerLayout = drawer_Layout
+//        drawerLayout = binding.drawer_Layout
         // For Navigation UP
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
 
         //NavigationUI.setupWithNavController(navigation_view,navController)
-        NavigationUI.setupWithNavController(navView, navController)
+        NavigationUI.setupWithNavController(binding.navView, navController)
 
-        navView.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
         val navigationView : NavigationView  = findViewById(R.id.navView)
         val headerView : View = navigationView.getHeaderView(0)
         val navUsername : TextView = headerView.findViewById(R.id.nameOfUser)
 
         firestore.collection("users").document(auth.currentUser?.uid.toString()).get()
-            .addOnCompleteListener {task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document?.getString("name") != null) {
@@ -77,9 +77,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
-        imagesRef?.downloadUrl?.addOnSuccessListener {
-            Glide.with(this).load(it).into(imageOfUser)
-        }
+//        imagesRef?.downloadUrl?.addOnSuccessListener {
+//            Glide.with(this).load(it).into(binding.imageOfUser)
+//        }
     }
 
 

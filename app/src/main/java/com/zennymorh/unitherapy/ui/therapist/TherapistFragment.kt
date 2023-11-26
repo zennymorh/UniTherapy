@@ -9,14 +9,16 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.databinding.FragmentTherapistBinding
 import com.zennymorh.unitherapy.model.User
-import kotlinx.android.synthetic.main.fragment_therapist.*
 
 class TherapistFragment : Fragment() {
 
     private lateinit var therapyViewModel: TherapyViewModel
     lateinit var therapistAdapter: TherapistAdapter
+
+    private var _binding: FragmentTherapistBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +27,9 @@ class TherapistFragment : Fragment() {
     ): View? {
         therapyViewModel = ViewModelProviders.of(this).get(TherapyViewModel::class.java)
 
-        return inflater.inflate(R.layout.fragment_therapist, container, false)
+        _binding = FragmentTherapistBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +41,7 @@ class TherapistFragment : Fragment() {
 
         therapistAdapter = TherapistAdapter(options)
 
-        rvTherapist.apply {
+        binding.rvTherapist.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             adapter = therapistAdapter
             setHasFixedSize(true)

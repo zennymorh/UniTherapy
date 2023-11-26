@@ -19,13 +19,15 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.databinding.FragmentSignUpBinding
 import com.zennymorh.unitherapy.model.User
-import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
+
+    private var _binding: FragmentSignUpBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +41,18 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signUpBtn.setOnClickListener {
-            val name = userNameET.text.toString()
-            val email = emailAddressInput.text.toString()
-            val password = passwordInput.text.toString()
+        binding.signUpBtn.setOnClickListener {
+            val name = binding.userNameET.text.toString()
+            val email = binding.emailAddressInput.text.toString()
+            val password = binding.passwordInput.text.toString()
 
             if (!isValidEntry(name, email, password)) {
                 return@setOnClickListener
@@ -59,15 +63,15 @@ class SignUpFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         handleSignUpSuccess(name, email)
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
                     } else {
                         handleSignUpFailure(task)
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
                     }
                 }
         }
 
-        signInTV.setOnClickListener {
+        binding.signInTV.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
         }
     }
@@ -87,7 +91,7 @@ class SignUpFragment : Fragment() {
 
         val db = Firebase.firestore
         val userId = auth.currentUser?.uid
-        val isTherapistChecked = therapistCheckBox.isChecked
+        val isTherapistChecked = binding.therapistCheckBox.isChecked
 
         val user = User(
             id = userId,

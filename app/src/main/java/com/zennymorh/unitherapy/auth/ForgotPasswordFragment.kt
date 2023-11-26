@@ -12,11 +12,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
-import kotlinx.android.synthetic.main.fragment_forgot_password.proceedBtn
-import kotlinx.android.synthetic.main.fragment_forgot_password.emailInput
-import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
+import com.zennymorh.unitherapy.databinding.FragmentForgotPasswordBinding
 
 class ForgotPasswordFragment : Fragment() {
+
+    private var _binding: FragmentForgotPasswordBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +26,9 @@ class ForgotPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forgot_password, container, false)
+        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     companion object {
@@ -34,8 +38,8 @@ class ForgotPasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        proceedBtn.setOnClickListener {
-            val email = emailInput.text.toString()
+        binding.proceedBtn.setOnClickListener {
+            val email = binding.emailInput.text.toString()
             if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(
                     context,
@@ -44,7 +48,7 @@ class ForgotPasswordFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
-            indeterminateBar.transitionName = "Loading"
+            binding.indeterminateBar.transitionName = "Loading"
 
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
@@ -57,20 +61,20 @@ class ForgotPasswordFragment : Fragment() {
                         findNavController().navigate(
                             R.id.action_forgotPasswordFragment_to_signInFragment
                         )
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
                     } else {
                         Toast.makeText(
                             context, "Something went wrong. ", Toast.LENGTH_SHORT).show()
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-                    indeterminateBar.visibility = View.GONE
+                    binding.indeterminateBar.visibility = View.GONE
                 }
                 .addOnSuccessListener {
                     Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
-                    indeterminateBar.visibility = View.GONE
+                    binding.indeterminateBar.visibility = View.GONE
                 }
         }
     }

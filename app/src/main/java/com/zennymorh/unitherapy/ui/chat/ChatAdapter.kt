@@ -7,10 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Message
-import androidx.navigation.fragment.navArgs
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 const val VIEW_TYPE_MY_MESSAGE = 1

@@ -1,33 +1,33 @@
 package com.zennymorh.unitherapy.ui.community
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.databinding.FragmentPostBinding
 import com.zennymorh.unitherapy.model.Posts
-import com.zennymorh.unitherapy.model.User
-import kotlinx.android.synthetic.main.fragment_post.*
-import java.sql.Timestamp
-import java.util.ArrayList
 
 class PostFragment : Fragment() {
 
     private lateinit var database: FirebaseFirestore
+    private var _binding: FragmentPostBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post, container, false)
+        _binding = FragmentPostBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,28 +36,27 @@ class PostFragment : Fragment() {
         database = Firebase.firestore
         val userId = Firebase.auth.currentUser?.uid
 
-        edit_post.background = null
+        binding.editPost.background = null
 
-        close_button.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             activity?.onBackPressed()
         }
 
-        post_button.setOnClickListener {
+        binding.postButton.setOnClickListener {
 
-            if (edit_post.text.isEmpty()) {
+            if (binding.editPost.text.isEmpty()) {
                 Toast.makeText(requireContext(), "Can't make empty post", Toast.LENGTH_LONG).show()
-            } else {
-                if (userId != null) {
-                    database.collection("users").document(userId).get()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
+            } else if (userId != null) {
+                database.collection("users").document(userId).get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
 
-                                val document = task.result
+                            val document = task.result
 
-                                val name = document?.getString("name").toString()
-                                val postContent = edit_post.text.toString()
+                            val name = document?.getString("name").toString()
+                            val postContent = binding.editPost.text.toString()
 
-                                val timestamp = System.currentTimeMillis()
+                            val timestamp = System.currentTimeMillis()
 
 
                                 val postId = "$userId:$timestamp"
@@ -76,7 +75,7 @@ class PostFragment : Fragment() {
                                 activity?.onBackPressed()
                             }
                         }
-                }
+
             }
         }
 

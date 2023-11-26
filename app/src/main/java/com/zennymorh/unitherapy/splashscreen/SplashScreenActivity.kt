@@ -3,7 +3,6 @@ package com.zennymorh.unitherapy.splashscreen
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

@@ -5,27 +5,23 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
-import android.util.Log
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import com.bumptech.glide.Glide
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import com.zennymorh.unitherapy.MainActivity
-import com.zennymorh.unitherapy.R
+import com.zennymorh.unitherapy.databinding.ActivityProfileBinding
 import com.zennymorh.unitherapy.model.User
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class ProfileActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityProfileBinding
+
 
     private val pickImage = 100
     private var imageUri: Uri? = null
@@ -35,16 +31,18 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         getProfile()
 
-        saveBtn.setOnClickListener {
+        binding.saveBtn.setOnClickListener {
             editProfile()
         }
-        uploadImgTV.setOnClickListener {
+        binding.uploadImgTV.setOnClickListener {
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery,pickImage)
+            startActivityForResult(gallery, pickImage)
         }
     }
 
@@ -53,8 +51,7 @@ class ProfileActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK && requestCode == pickImage) {
             imageUri = data?.data
 
-            Log.d("WAHALAA", imageUri.toString())
-            profileImage.setImageURI(imageUri)
+            binding.profileImage.setImageURI(imageUri)
         }
     }
 
@@ -66,8 +63,7 @@ class ProfileActivity : AppCompatActivity() {
         val userId = Firebase.auth.currentUser?.uid
 
         imagesRef.downloadUrl.addOnSuccessListener {
-            Glide.with(this).load(it).into(profileImage)
-            Log.d("TAG", "I got here")
+            Glide.with(this).load(it).into(binding.profileImage)
         }
 
         database.collection("users").document(userId!!).get()
@@ -76,32 +72,32 @@ class ProfileActivity : AppCompatActivity() {
                     val document = task.result
 
                     if (document?.getString("name") != null) {
-                        fullNameET.hint = ""
-                        fullNameET.text = document.getString("name")?.toEditable()
+                        binding.fullNameET.hint = ""
+                        binding.fullNameET.text = document.getString("name")?.toEditable()
                     }
 
                     if (document?.getString("title") != null) {
-                        therapistTypeET.hint = ""
-                        therapistTypeET.text = document.getString("title")?.toEditable()
+                        binding.therapistTypeET.hint = ""
+                        binding.therapistTypeET.text = document.getString("title")?.toEditable()
                     }
 
                     if (document?.getString("bio") != null) {
-                        fullBioET.hint = ""
-                        fullBioET.text = document.getString("bio")?.toEditable()
+                        binding.fullBioET.hint = ""
+                        binding.fullBioET.text = document.getString("bio")?.toEditable()
                     }
 
                     if (document?.getString("hobbies") != null) {
-                        hobbiesET.hint = ""
-                        hobbiesET.text = document.getString("hobbies")?.toEditable()
+                        binding.hobbiesET.hint = ""
+                        binding.hobbiesET.text = document.getString("hobbies")?.toEditable()
                     }
 
                     if (document?.getString("workExp") != null) {
-                        workExpET.hint = ""
-                        workExpET.text = document.getString("workExp")?.toEditable()
+                        binding.workExpET.hint = ""
+                        binding.workExpET.text = document.getString("workExp")?.toEditable()
                     }
 
                     if (document?.getBoolean("isTherapist") == true) {
-                        therapistCheckBox.isChecked = true
+                        binding.therapistCheckBox.isChecked = true
                     }
                 }
             }
@@ -112,12 +108,12 @@ class ProfileActivity : AppCompatActivity() {
 
         val database = FirebaseFirestore.getInstance()
         val email = Firebase.auth.currentUser?.email
-        val name = fullNameET.text.toString()
-        val title = therapistTypeET.text.toString()
-        val bio = fullBioET.text.toString()
-        val hobbies = hobbiesET.text.toString()
-        val workExp = workExpET.text.toString()
-        val isTherapistChecked = therapistCheckBox.isChecked
+        val name = binding.fullNameET.text.toString()
+        val title = binding.therapistTypeET.text.toString()
+        val bio = binding.fullBioET.text.toString()
+        val hobbies = binding.hobbiesET.text.toString()
+        val workExp = binding.workExpET.text.toString()
+        val isTherapistChecked = binding.therapistCheckBox.isChecked
 
         saveImage()
 
@@ -158,16 +154,22 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun performValidations(): Boolean {
-        if (fullNameET.text.toString() == "" || fullNameET.text.toString().isDigitsOnly()) {
-            fullNameET.error = "Please Enter valid Name"
+        if (binding.fullNameET.text.toString() == "" || binding.fullNameET.text.toString()
+                .isDigitsOnly()
+        ) {
+            binding.fullNameET.error = "Please Enter valid Name"
             return false
         }
-        if (therapistTypeET.text.toString() == "" || therapistTypeET.text.toString().isDigitsOnly()) {
-            therapistTypeET.error = "Please Enter valid Therapist type"
+        if (binding.therapistTypeET.text.toString() == "" || binding.therapistTypeET.text.toString()
+                .isDigitsOnly()
+        ) {
+            binding.therapistTypeET.error = "Please Enter valid Therapist type"
             return false
         }
-        if (fullBioET.text.toString() == "" || fullBioET.text.toString().isDigitsOnly()) {
-            fullBioET.error = "Please enter a bio"
+        if (binding.fullBioET.text.toString() == "" || binding.fullBioET.text.toString()
+                .isDigitsOnly()
+        ) {
+            binding.fullBioET.error = "Please enter a bio"
             return false
         }
         return true

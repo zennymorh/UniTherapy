@@ -1,11 +1,7 @@
 package com.zennymorh.unitherapy.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-import java.util.*
-import kotlinx.android.parcel.RawValue
+import java.util.Date
 
-@Parcelize
 data class User(
     val id: String? = null,
     val name: String? = null,
@@ -19,27 +15,24 @@ data class User(
     val fullDesc: String? = null,
     val workExp: String? = null,
     val hobbies: String? = null,
-    var rooms: @RawValue MutableMap<String, Any>? = null
-) : Parcelable
+    var rooms: MutableMap<String, Any>? = null
+)
 
-@Parcelize
 data class Posts(
     val postId: String? = null,
     val name: String? = null,
     val post: String? = null,
     val timestamp: Long? = null
-): Parcelable
+)
 
-@Parcelize
 data class Message(
     val messageText: String = "",
     val user: String? = null,
     val timestamp: Date?,
     val receiver: String? = null
-): Parcelable
+)
 
-@Parcelize
 data class Rooms(
     val roomId: String = "",
     val therapistName: String = ""
-): Parcelable
+)

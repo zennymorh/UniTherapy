@@ -1,25 +1,22 @@
 package com.zennymorh.unitherapy.ui.chat
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.zennymorh.unitherapy.R
-import com.zennymorh.unitherapy.auth.AuthActivity
+import com.zennymorh.unitherapy.databinding.FragmentChatBinding
 import com.zennymorh.unitherapy.model.Message
-import kotlinx.android.synthetic.main.fragment_chat.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ChatFragment : Fragment() {
+
+    private var _binding: FragmentChatBinding? = null
+    private val binding get() = _binding!!
 
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
@@ -36,7 +33,9 @@ class ChatFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +46,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setViewListeners() {
-        button_send.setOnClickListener {
+        binding.buttonSend.setOnClickListener {
             sendChatMessage()
         }
     }
@@ -56,9 +55,9 @@ class ChatFragment : Fragment() {
         if (user == null)
             return
 
-        recycler_view_messages.layoutManager = LinearLayoutManager(requireActivity())
+        binding.recyclerViewMessages.layoutManager = LinearLayoutManager(requireActivity())
         val adapter = ChatAdapter(chatMessages, user.uid)
-        recycler_view_messages.adapter = adapter
+        binding.recyclerViewMessages.adapter = adapter
         listenForChatMessages()
     }
 
@@ -103,13 +102,13 @@ class ChatFragment : Fragment() {
                 }
 
                 chatMessages.sortBy { it.timestamp }
-                recycler_view_messages.adapter?.notifyDataSetChanged()
+                binding.recyclerViewMessages.adapter?.notifyDataSetChanged()
             }
     }
 
     private fun sendChatMessage() {
-        val message = editText_message.text.toString()
-        editText_message.setText("")
+        val message = binding.editTextMessage.text.toString()
+        binding.editTextMessage.setText("")
 
         firestore.collection("users")
             .document(user?.uid.toString())

@@ -5,10 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.favorite_item.view.*
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.ktx.auth
@@ -16,8 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Posts
-import com.zennymorh.unitherapy.model.User
-import com.zennymorh.unitherapy.ui.community.list.PostAdapter
 
 class FavoritesAdapter(options: FirestoreRecyclerOptions<Posts>):
     FirestoreRecyclerAdapter<Posts, FavoritesAdapter.FavoritesViewHolder>(options) {

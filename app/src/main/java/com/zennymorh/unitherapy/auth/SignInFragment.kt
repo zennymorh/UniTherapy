@@ -20,15 +20,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
 import com.zennymorh.unitherapy.R
-import kotlinx.android.synthetic.main.fragment_forgot_password.indeterminateBar
-import kotlinx.android.synthetic.main.fragment_sign_in.signInBtn
-import kotlinx.android.synthetic.main.fragment_sign_in.signUp
-import kotlinx.android.synthetic.main.fragment_sign_in.signInGoogleBtn
-import kotlinx.android.synthetic.main.fragment_sign_in.forgotPasswordTV
-import kotlinx.android.synthetic.main.fragment_sign_in.emailAddressInput
-import kotlinx.android.synthetic.main.fragment_sign_in.passwordInput
+import com.zennymorh.unitherapy.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
+
+    private var _binding: FragmentSignInBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val RC_SIGN_IN = 123
@@ -38,7 +35,7 @@ class SignInFragment : Fragment() {
 
     private val gso by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(getString(R.string.app_name))
             .requestEmail()
             .build()
     }
@@ -61,18 +58,20 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+        _binding = FragmentSignInBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signInBtn.setOnClickListener {
-            indeterminateBar.visibility = View.VISIBLE
+        binding.signInBtn.setOnClickListener {
+            binding.indeterminateBar.visibility = View.VISIBLE
 
 
-            val email = emailAddressInput.text.toString()
-            val password = passwordInput.text.toString()
+            val email = binding.emailAddressInput.text.toString()
+            val password = binding.passwordInput.text.toString()
             if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(context, "Enter a valid email address", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -86,7 +85,7 @@ class SignInFragment : Fragment() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
 
                         val intent = Intent(this.activity, MainActivity::class.java)
                         startActivity(intent)
@@ -96,20 +95,20 @@ class SignInFragment : Fragment() {
                             "Authentication failed." + task.exception?.message,
                             Toast.LENGTH_SHORT
                         ).show()
-                        indeterminateBar.visibility = View.GONE
+                        binding.indeterminateBar.visibility = View.GONE
                     }
                 }
         }
 
-        signUp.setOnClickListener {
+        binding.signUp.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
         }
 
-        signInGoogleBtn.setOnClickListener {
+        binding.signInGoogleBtn.setOnClickListener {
             signIn()
         }
 
-        forgotPasswordTV.setOnClickListener {
+        binding.forgotPasswordTV.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
         }
     }

@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zennymorh.unitherapy.R
-import kotlinx.android.synthetic.main.fragment_community.*
 
 class CommunitySectionsFragment : Fragment() {
 
@@ -38,16 +36,17 @@ class CommunitySectionsFragment : Fragment() {
                 0 -> {
                     tab.text = "All"
                 }
+
                 1 -> {
                     tab.text = "Favourites"
                 }
             }
         }.attach()
 
-        postFAB.setOnClickListener {
-            val action = CommunitySectionsFragmentDirections.actionNavigationCommunityToPostFragment()
-            findNavController().navigate(action)
-        }
+//        postFAB.setOnClickListener {
+//            val action = CommunitySectionsFragmentDirections.actionNavigationCommunityToPostFragment()
+//            findNavController().navigate(action)
+//        }
     }
 }
 

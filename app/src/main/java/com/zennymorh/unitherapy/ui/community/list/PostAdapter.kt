@@ -3,24 +3,16 @@ package com.zennymorh.unitherapy.ui.community.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import android.widget.ToggleButton
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.model.Posts
-import com.zennymorh.unitherapy.model.User
-import com.zennymorh.unitherapy.ui.therapist.TherapistAdapter
-import com.zennymorh.unitherapy.ui.therapist.TherapistFragmentDirections
 
 
 class PostAdapter(options: FirestoreRecyclerOptions<Posts>):
