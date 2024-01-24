@@ -1,18 +1,18 @@
 <resources>
-    <string name="app_name">UniTherapy</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="sign_up_tv">Sign Up</string>
+    <string name="unitherapy">UniTherapy</string>
+    <string name="home">Home</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="notifications">Notifications</string>
+    <string name="sign_up">Sign Up</string>
     <string name="name">Name</string>
-    <string name="email_address_tv">Email Address</string>
-    <string name="password_tv">Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chat">Chat</string>
     <string name="community">Community</string>
     <string name="therapist">Therapist</string>
-    <string name="reset_password_text">You will receive a mail that will contain a link to reset your password</string>
+    <string name="reset_password_desc">You will receive a mail that will contain a link to reset your password</string>
     <string name="contentDesc">A random Image</string>
     <string name="testBio">I believe everyone should have a safe and healing place to work through lif
         e\'s difficulties. I try to help bring families and couples closer together through therapeutic

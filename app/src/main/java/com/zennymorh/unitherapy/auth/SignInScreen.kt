@@ -139,7 +139,7 @@ fun SignInScreen(
                 append(stringResource(id = R.string.first_time))
                 append(" ")
                 withStyle(style = SpanStyle(color = colorResource(id = R.color.colorAccent))) {
-                    append(stringResource(id = R.string.sign_up_tv))
+                    append(stringResource(id = R.string.sign_up))
                 }
             },
             fontSize = 12.sp,
@@ -158,7 +158,9 @@ fun EmailAddressTextField() {
         value = text,
         onValueChange = { text = it },
         label = { Text("Email Address") },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     )
 }
 
@@ -172,7 +174,9 @@ fun PasswordTextField() {
         value = text,
         onValueChange = { text = it },
         label = { Text("Password") },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
         visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
 
         trailingIcon = {

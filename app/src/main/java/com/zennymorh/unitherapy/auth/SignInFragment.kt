@@ -35,7 +35,7 @@ class SignInFragment : Fragment() {
 
     private val gso by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.app_name))
+            .requestIdToken(getString(R.string.unitherapy))
             .requestEmail()
             .build()
     }
