@@ -31,4 +31,5 @@
     <string name="log_in_with_email">Log in with email</string>
     <string name="continue_text">Continue</string>
     <string name="first_time">First time?</string>
+    <string name="log_in_with_google">Log in with Google</string>
 </resources>

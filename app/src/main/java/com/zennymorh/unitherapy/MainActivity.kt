@@ -38,8 +38,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val userId = Firebase.auth.currentUser?.uid
     private val imagesRef = userId?.let { storageRef.child("images").child(it) }
 
+    //    @Composable
+//    fun MyFirstScreen() {
+//        Text(text = "Somethihgn")
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        setContent {
+//            MaterialTheme {
+//                MyFirstScreen()
+//            }
+//        }
 
         auth = Firebase.auth
 
