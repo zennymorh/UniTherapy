@@ -10,11 +10,24 @@ import com.zennymorh.unitherapy.auth.SignInScreen
 fun NavigationHost() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "profile") {
+    NavHost(navController = navController, startDestination = "signUpScreen") {
         composable("signInScreen") {
-            SignInScreen(onSignInWithEmail = {}, onSignInWithGoogle = {})
+            SignInScreen(
+                onSignInWithEmail = {},
+                onSignInWithGoogle = {},
+                onNavigateToSignUp = {
+                    navController.navigate("signUpScreen")
+                }
+            )
         }
-        composable("signUpScreen") { SignUpScreen(onSignUpWithEmail = {}) }
+        composable("signUpScreen") {
+            SignUpScreen(
+                onSignUpWithEmail = {},
+                onNavigateToSignIn = {
+                    navController.navigate("signInScreen")
+                }
+            )
+        }
     }
 }
 

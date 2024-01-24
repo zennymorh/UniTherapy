@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.MaterialTheme
+import com.zennymorh.unitherapy.NavigationHost
 
 class AuthActivity : AppCompatActivity() {
 
@@ -14,8 +15,7 @@ class AuthActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
-                SignInScreen(onSignInWithGoogle = {},
-                    onSignInWithEmail = {})
+                NavigationHost()
             }
         }
 //

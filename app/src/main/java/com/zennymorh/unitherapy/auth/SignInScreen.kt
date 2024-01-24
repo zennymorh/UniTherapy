@@ -1,5 +1,6 @@
 package com.zennymorh.unitherapy.auth
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,7 @@ import com.zennymorh.unitherapy.R
 fun SignInScreen(
     onSignInWithGoogle: () -> Unit,
     onSignInWithEmail: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -144,7 +146,10 @@ fun SignInScreen(
             },
             fontSize = 12.sp,
             modifier = Modifier
-                .padding(vertical = 14.dp),
+                .padding(vertical = 14.dp)
+                .clickable {
+                    onNavigateToSignUp()
+                },
         )
 
     }
@@ -197,6 +202,7 @@ fun PasswordTextField() {
 fun SignInScreenPreview() {
     SignInScreen(
         onSignInWithGoogle = {},
-        onSignInWithEmail = {}
+        onSignInWithEmail = {},
+        onNavigateToSignUp = {}
     )
 }

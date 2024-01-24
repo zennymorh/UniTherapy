@@ -1,13 +1,16 @@
 package com.zennymorh.unitherapy
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -33,6 +36,7 @@ import com.zennymorh.unitherapy.auth.PasswordTextField
 @Composable
 fun SignUpScreen(
     onSignUpWithEmail: () -> Unit,
+    onNavigateToSignIn: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -40,7 +44,7 @@ fun SignUpScreen(
         modifier = Modifier.padding(16.dp)
     ) {
         Text(
-            text = "Welcome back!",
+            text = "Sign Up",
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
         )
@@ -52,6 +56,10 @@ fun SignUpScreen(
         EmailAddressTextField()
 
         PasswordTextField()
+
+        TherapistCheckbox(
+            modifier = Modifier.align(Alignment.Start)
+        )
 
         Spacer(modifier = Modifier.height(90.dp))
 
@@ -76,7 +84,10 @@ fun SignUpScreen(
             },
             fontSize = 12.sp,
             modifier = Modifier
-                .padding(vertical = 14.dp),
+                .padding(vertical = 14.dp)
+                .clickable {
+                    onNavigateToSignIn()
+                },
         )
 
     }
@@ -97,9 +108,23 @@ fun NameTextField() {
 }
 
 @Composable
+fun TherapistCheckbox(modifier: Modifier) {
+    val checked = remember { mutableStateOf(false) }
+
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        Checkbox(
+            checked = checked.value,
+            onCheckedChange = { isChecked -> checked.value = isChecked }
+        )
+        Text(text = "I am a therapist")
+    }
+}
+
+@Composable
 @Preview
 fun SignUpScreenPreview() {
     SignUpScreen(
-        onSignUpWithEmail = {}
+        onSignUpWithEmail = {},
+        onNavigateToSignIn = {}
     )
 }
