@@ -9,23 +9,27 @@
         android:label="@string/unitherapy"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.profile.ProfileActivity" />
+        android:theme="@style/Theme.MyApplication">
+
+        <activity android:name=".ui.profile.ProfileActivity">
+
+        </activity>
         <activity
-            android:name=".splashscreen.SplashScreenActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name=".MainActivity"
+            android:label="@string/unitherapy"
+            android:theme="@style/Theme.MySplashScreen"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/unitherapy"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".auth.AuthActivity" />
+
+        <activity android:name=".auth.AuthActivity">
+
+        </activity>
     </application>
 
 </manifest>

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -101,7 +100,7 @@ class SignInFragment : Fragment() {
         }
 
         binding.signUp.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+//            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
         }
 
         binding.signInGoogleBtn.setOnClickListener {
@@ -109,7 +108,7 @@ class SignInFragment : Fragment() {
         }
 
         binding.forgotPasswordTV.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
+//            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
         }
     }
 

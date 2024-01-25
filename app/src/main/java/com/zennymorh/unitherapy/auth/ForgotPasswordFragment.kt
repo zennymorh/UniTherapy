@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.databinding.FragmentForgotPasswordBinding
 
 class ForgotPasswordFragment : Fragment() {
@@ -58,9 +56,9 @@ class ForgotPasswordFragment : Fragment() {
                             "Reset password email has been successfully sent to the email",
                             Toast.LENGTH_SHORT
                         ).show()
-                        findNavController().navigate(
-                            R.id.action_forgotPasswordFragment_to_signInFragment
-                        )
+//                        findNavController().navigate(
+//                            R.id.action_forgotPasswordFragment_to_signInFragment
+//                        )
                         binding.indeterminateBar.visibility = View.GONE
                     } else {
                         Toast.makeText(

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +17,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.zennymorh.unitherapy.MainActivity
-import com.zennymorh.unitherapy.R
 import com.zennymorh.unitherapy.databinding.FragmentSignUpBinding
 import com.zennymorh.unitherapy.model.User
 
@@ -72,7 +70,7 @@ class SignUpFragment : Fragment() {
         }
 
         binding.signInTV.setOnClickListener {
-            findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
+//            findNavController().navigate(R.id.action_signUpFragment_to_signInFragment)
         }
     }
 
