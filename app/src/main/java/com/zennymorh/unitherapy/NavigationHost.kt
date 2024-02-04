@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.zennymorh.unitherapy.auth.ForgotPasswordScreen
 import com.zennymorh.unitherapy.auth.SignInScreen
+import com.zennymorh.unitherapy.auth.SignUpScreen
 
 @Composable
 fun NavigationHost() {
@@ -17,6 +19,9 @@ fun NavigationHost() {
                 onSignInWithGoogle = {},
                 onNavigateToSignUp = {
                     navController.navigate("signUpScreen")
+                },
+                onNavigateToForgotPassword = {
+                    navController.navigate("forgotPasswordScreen")
                 }
             )
         }
@@ -26,6 +31,11 @@ fun NavigationHost() {
                 onNavigateToSignIn = {
                     navController.navigate("signInScreen")
                 }
+            )
+        }
+        composable("forgotPasswordScreen") {
+            ForgotPasswordScreen(
+                onSubmitClicked = {},
             )
         }
     }

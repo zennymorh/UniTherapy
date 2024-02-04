@@ -45,6 +45,7 @@ fun SignInScreen(
     onSignInWithGoogle: () -> Unit,
     onSignInWithEmail: () -> Unit,
     onNavigateToSignUp: () -> Unit,
+    onNavigateToForgotPassword: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -52,9 +53,8 @@ fun SignInScreen(
         modifier = Modifier.padding(16.dp)
     ) {
         Text(
-            text = "Welcome back!",
+            text = stringResource(R.string.welcome_back),
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -121,7 +121,10 @@ fun SignInScreen(
             fontSize = 12.sp,
             modifier = Modifier
                 .padding(vertical = 14.dp)
-                .align(Alignment.End),
+                .align(Alignment.End)
+                .clickable {
+                    onNavigateToForgotPassword()
+                },
         )
         Spacer(modifier = Modifier.height(100.dp))
 
@@ -203,6 +206,7 @@ fun SignInScreenPreview() {
     SignInScreen(
         onSignInWithGoogle = {},
         onSignInWithEmail = {},
-        onNavigateToSignUp = {}
+        onNavigateToSignUp = {},
+        onNavigateToForgotPassword = {},
     )
 }

@@ -32,4 +32,6 @@
     <string name="continue_text">Continue</string>
     <string name="first_time">First time?</string>
     <string name="log_in_with_google">Log in with Google</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="submit">Submit</string>
 </resources>
