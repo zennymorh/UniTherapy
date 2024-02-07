@@ -108,7 +108,7 @@ class SignInFragment : Fragment() {
         }
 
         binding.forgotPasswordTV.setOnClickListener {
-//            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
+
         }
     }
 
